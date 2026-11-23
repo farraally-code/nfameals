@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -511,9 +510,9 @@
       font-weight: 700;
       padding: 2px 8px;
       border-radius: 999px;
-      background: var(--blue-soft);
-      color: var(--blue);
-      border: 1px solid var(--blue-border);
+      background: var(--green-soft);
+      color: #15803d;
+      border: 1px solid var(--green-border);
     }
     .link-row { display: flex; gap: 8px; align-items: center; }
     .link-input {
@@ -923,7 +922,7 @@
         <div class="link-box">
           <div class="link-box-head">
             <span class="link-box-title">1. Short Customer Order Link (Copy &amp; Share)</span>
-            <span class="char-badge" id="shortLinkChars">Short Link</span>
+            <span class="char-badge" id="shortLinkChars">Ultra-Short Link</span>
           </div>
           <div class="link-row">
             <input type="text" class="link-input" id="shortCustomerLinkInput" readonly />
@@ -932,9 +931,20 @@
           </div>
         </div>
 
+        <div class="link-box">
+          <div class="link-box-head">
+            <span class="link-box-title">2. Clean Direct Link (Shortest Possible URL)</span>
+            <span class="char-badge" style="background:var(--blue-soft); color:var(--blue); border-color:var(--blue-border);">Clean URL</span>
+          </div>
+          <div class="link-row">
+            <input type="text" class="link-input" id="cleanDirectLinkInput" readonly />
+            <button type="button" class="btn btn-outline btn-sm" style="margin-top:0;" data-action="copy-clean-link">Copy Clean URL</button>
+          </div>
+        </div>
+
         <div class="link-box" style="margin-bottom:0;">
           <div class="link-box-head">
-            <span class="link-box-title">2. Seller Admin Link (Bookmark This)</span>
+            <span class="link-box-title">3. Seller Admin Link (Bookmark This)</span>
             <span class="char-badge" style="background:#f1f5f9; color:#475569; border-color:#cbd5e1;">Admin Only</span>
           </div>
           <div class="link-row">
@@ -1251,7 +1261,31 @@
         }
       }
 
-      // Encode/decode safe URL payload (no Base64 images in URL to prevent mobile crashes)
+      // Compact Base64URL helpers
+      function toBase64Url(str) {
+        try {
+          const bytes = new TextEncoder().encode(str);
+          let bin = '';
+          for (let i = 0; i < bytes.length; i++) bin += String.fromCharCode(bytes[i]);
+          return btoa(bin).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+        } catch (e) {
+          return '';
+        }
+      }
+
+      function fromBase64Url(b64) {
+        try {
+          let norm = b64.replace(/-/g, '+').replace(/_/g, '/');
+          while (norm.length % 4) norm += '=';
+          const bin = atob(norm);
+          const bytes = new Uint8Array(bin.length);
+          for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+          return new TextDecoder().decode(bytes);
+        } catch (e) {
+          return '';
+        }
+      }
+
       function encodeSafePayload(obj) {
         try {
           return encodeURIComponent(JSON.stringify(obj));
@@ -1267,9 +1301,23 @@
         }
       }
 
-      function parseCustomerHash(hash) {
-        if (!hash.startsWith('#o=')) return false;
-        const data = decodeSafePayload(hash.slice(3));
+      // Check if menu structure still matches default 3 items (names & descriptions)
+      function isDefaultMenuStructure() {
+        if (!Array.isArray(config.menus) || config.menus.length !== 3) return false;
+        for (let i = 0; i < 3; i++) {
+          const cur = config.menus[i];
+          const def = DEFAULT_CONFIG.menus[i];
+          if ((cur.name || '').trim() !== def.name) return false;
+          if ((cur.desc || '').trim() !== def.desc) return false;
+          if (cur.photoUrl && cur.photoUrl.startsWith('http')) return false;
+        }
+        if ((config.storeName || 'NFA meals').trim() !== 'NFA meals') return false;
+        if ((config.introText || DEFAULT_INTRO).trim() !== DEFAULT_INTRO.trim()) return false;
+        if ((config.closedMsg || DEFAULT_CLOSED).trim() !== DEFAULT_CLOSED.trim()) return false;
+        return true;
+      }
+
+      function applyCompactData(data) {
         if (!data || typeof data !== 'object') return false;
         if (typeof data.o === 'boolean') config.isOpen = data.o;
         if (data.w) config.whatsapp = String(data.w);
@@ -1290,6 +1338,58 @@
               photoUrl: item.u && String(item.u).startsWith('http') ? String(item.u) : ''
             };
           });
+        }
+        return true;
+      }
+
+      function parseCustomerHash(hash) {
+        if (!hash.startsWith('#o=')) return false;
+        const payload = hash.slice(3);
+
+        // 1. Base64URL compact custom menu (#o=b....)
+        if (payload.startsWith('b.')) {
+          const jsonStr = fromBase64Url(payload.slice(2));
+          if (!jsonStr) return false;
+          try {
+            return applyCompactData(JSON.parse(jsonStr));
+          } catch (e) {
+            return false;
+          }
+        }
+
+        // 2. Legacy URI-encoded JSON (#o=%7B...%7D)
+        if (payload.startsWith('%7B') || payload.startsWith('{')) {
+          return applyCompactData(decodeSafePayload(payload));
+        }
+
+        // 3. Ultra-short tilde format: #o=<1|0>~<wa>~<mask>~<prices>~<fee>~<qrUrl>
+        const parts = decodeURIComponent(payload).split('~');
+        if (parts[0] === '0') config.isOpen = false;
+        else if (parts[0] === '1') config.isOpen = true;
+
+        if (parts[1]) config.whatsapp = parts[1];
+
+        if (parts[2] && parts[2].length === config.menus.length) {
+          config.menus.forEach(function (m, idx) {
+            m.available = parts[2][idx] === '1';
+          });
+        }
+
+        if (parts[3]) {
+          const prices = parts[3].split(',');
+          config.menus.forEach(function (m, idx) {
+            if (prices[idx] && !isNaN(parseFloat(prices[idx]))) {
+              m.price = parseFloat(prices[idx]);
+            }
+          });
+        }
+
+        if (parts[4] && !isNaN(parseFloat(parts[4]))) {
+          config.fee = parseFloat(parts[4]);
+        }
+
+        if (parts[5] && parts[5].startsWith('http')) {
+          config.qrUrl = parts[5];
         }
         return true;
       }
@@ -1540,7 +1640,8 @@
             return { n: it.name, q: it.qty, p: it.price };
           })
         };
-        return baseUrl + '#r=' + encodeSafePayload(compact);
+        const b64 = toBase64Url(JSON.stringify(compact));
+        return baseUrl + '#r=' + (b64 || encodeSafePayload(compact));
       }
 
       function buildOfficialReceiptText(order, url) {
@@ -1750,30 +1851,62 @@
 
       function refreshShareLinks() {
         const baseUrl = window.location.href.split('#')[0].split('?')[0];
-        const compact = {
-          o: config.isOpen,
-          w: config.whatsapp || '',
-          s: config.storeName || 'NFA meals',
-          i: config.introText || DEFAULT_INTRO,
-          c: config.closedMsg || DEFAULT_CLOSED,
-          f: Number(config.fee || 5),
-          q: config.qrUrl && config.qrUrl.startsWith('http') ? config.qrUrl : '',
-          m: config.menus.map(function (m) {
-            return {
-              id: m.id,
-              n: m.name,
-              p: Number(m.price),
-              d: m.desc,
-              a: !!m.available,
-              u: m.photoUrl && m.photoUrl.startsWith('http') ? m.photoUrl : ''
-            };
-          })
-        };
-        const encoded = encodeSafePayload(compact);
-        const custUrl = baseUrl + '#o=' + encoded;
+        let custUrl = '';
+
+        if (isDefaultMenuStructure()) {
+          // Ultra-short tilde format: #o=<1|0>~<wa>~<mask>~<prices>~<fee>~<qrUrl>
+          const openBit = config.isOpen ? '1' : '0';
+          const wa = config.whatsapp || '';
+          const mask = config.menus.map(function (m) { return m.available ? '1' : '0'; }).join('');
+          const prices = config.menus.map(function (m) { return Number(m.price); }).join(',');
+          const fee = Number(config.fee || 5);
+          const qrToken = config.qrUrl && config.qrUrl.startsWith('http') ? config.qrUrl : '';
+
+          const isDefaultMask = mask === '111';
+          const isDefaultPrices = prices === '10,12.5,15';
+          const isDefaultFee = fee === 5;
+
+          const parts = [
+            openBit,
+            wa,
+            (isDefaultMask && isDefaultPrices && isDefaultFee && !qrToken) ? '' : mask,
+            (isDefaultPrices && isDefaultFee && !qrToken) ? '' : prices,
+            (isDefaultFee && !qrToken) ? '' : String(fee),
+            qrToken
+          ];
+          while (parts.length > 2 && parts[parts.length - 1] === '') {
+            parts.pop();
+          }
+          custUrl = baseUrl + '#o=' + parts.join('~');
+        } else {
+          // Compact Base64URL when menu items/names/descriptions are customized
+          const compact = {
+            o: config.isOpen,
+            w: config.whatsapp || '',
+            s: config.storeName || 'NFA meals',
+            i: config.introText || DEFAULT_INTRO,
+            c: config.closedMsg || DEFAULT_CLOSED,
+            f: Number(config.fee || 5),
+            q: config.qrUrl && config.qrUrl.startsWith('http') ? config.qrUrl : '',
+            m: config.menus.map(function (m) {
+              return {
+                id: m.id,
+                n: m.name,
+                p: Number(m.price),
+                d: m.desc,
+                a: !!m.available,
+                u: m.photoUrl && m.photoUrl.startsWith('http') ? m.photoUrl : ''
+              };
+            })
+          };
+          const b64 = toBase64Url(JSON.stringify(compact));
+          custUrl = baseUrl + '#o=' + (b64 ? ('b.' + b64) : encodeSafePayload(compact));
+        }
+
         const adminUrl = baseUrl + '#setup';
 
         document.getElementById('shortCustomerLinkInput').value = custUrl;
+        document.getElementById('cleanDirectLinkInput').value = baseUrl;
         document.getElementById('sellerAdminLinkInput').value = adminUrl;
         document.getElementById('shortLinkChars').textContent = 'Short Link • ' + custUrl.length + ' chars';
       }
@@ -1962,7 +2095,9 @@
           populateSellerView();
           saveSettings(true);
         } else if (action === 'copy-cust-link') {
-          copyText(document.getElementById('shortCustomerLinkInput').value, 'Customer link copied!');
+          copyText(document.getElementById('shortCustomerLinkInput').value, 'Short customer link copied!');
+        } else if (action === 'copy-clean-link') {
+          copyText(document.getElementById('cleanDirectLinkInput').value, 'Clean direct link copied!');
         } else if (action === 'share-cust-wa') {
           const link = document.getElementById('shortCustomerLinkInput').value;
           const msg = (config.isOpen
@@ -2273,7 +2408,9 @@
         loadState();
         const hash = window.location.hash || '';
         if (hash.startsWith('#r=')) {
-          const recData = decodeSafePayload(hash.slice(3));
+          const rawRec = hash.slice(3);
+          const recStr = fromBase64Url(rawRec);
+          const recData = recStr ? JSON.parse(recStr) : decodeSafePayload(rawRec);
           if (recData) {
             renderOfficialReceiptPage(recData);
             return;
@@ -2294,4 +2431,3 @@
   </script>
 </body>
 </html>
-
