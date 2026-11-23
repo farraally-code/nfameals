@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -921,8 +922,8 @@
 
         <div class="link-box">
           <div class="link-box-head">
-            <span class="link-box-title">1. Short Customer Order Link (Copy &amp; Share)</span>
-            <span class="char-badge" id="shortLinkChars">Ultra-Short Link</span>
+            <span class="link-box-title">1. Ultra-Short Customer Link (Max 15-Char Code)</span>
+            <span class="char-badge" id="shortLinkChars">Ultra-Short • 12 chars</span>
           </div>
           <div class="link-row">
             <input type="text" class="link-input" id="shortCustomerLinkInput" readonly />
@@ -1166,14 +1167,14 @@
 
   <script>
     (function () {
-      const STORAGE_KEY = 'nfa_meals_cfg_v9';
-      const LOG_KEY = 'nfa_meals_log_v9';
-      const MAX_PAX_PER_MEAL = 5;
+      var STORAGE_KEY = 'nfa_meals_cfg_v10';
+      var LOG_KEY = 'nfa_meals_log_v10';
+      var MAX_PAX_PER_MEAL = 5;
 
-      const DEFAULT_INTRO = 'Freshly prepared home-cooked meals made especially for students — warm, hearty, and convenient for you.\n\n12:00 PM pickup at Library UMS.';
-      const DEFAULT_CLOSED = "Orders for today's 12:00 PM Library UMS collection are closed. Please check back for the next session.";
+      var DEFAULT_INTRO = 'Freshly prepared home-cooked meals made especially for students — warm, hearty, and convenient for you.\n\n12:00 PM pickup at Library UMS.';
+      var DEFAULT_CLOSED = "Orders for today's 12:00 PM Library UMS collection are closed. Please check back for the next session.";
 
-      const DEFAULT_CONFIG = {
+      var DEFAULT_CONFIG = {
         storeName: 'NFA meals',
         whatsapp: '60123456789',
         introText: DEFAULT_INTRO,
@@ -1189,7 +1190,7 @@
         ]
       };
 
-      const memStore = {};
+      var memStore = {};
       function safeGet(key) {
         try { return window.localStorage.getItem(key); } catch (e) { return memStore[key] || null; }
       }
@@ -1203,11 +1204,15 @@
         }
       }
 
-      let config = JSON.parse(JSON.stringify(DEFAULT_CONFIG));
-      let quantities = {};
-      let isCustomerLinkMode = false;
-      let activeIssuedOrder = null;
-      let activeReceiptData = null;
+      var config = JSON.parse(JSON.stringify(DEFAULT_CONFIG));
+      var quantities = {};
+      var isCustomerLinkMode = false;
+      var activeIssuedOrder = null;
+      var activeReceiptData = null;
+
+      function $(id) {
+        return document.getElementById(id);
+      }
 
       function esc(str) {
         return String(str == null ? '' : str)
@@ -1218,7 +1223,7 @@
       }
 
       function showToast(msg) {
-        const el = document.getElementById('toast');
+        var el = $('toast');
         if (!el) return;
         el.textContent = msg;
         el.classList.add('show');
@@ -1231,22 +1236,36 @@
       }
 
       function cleanPhone(raw) {
-        let digits = String(raw || '').replace(/\D/g, '');
+        var digits = String(raw || '').replace(/\D/g, '');
         if (digits.startsWith('0')) digits = '6' + digits;
         return digits;
       }
 
+      function stripMalaysiaPrefix(wa) {
+        var d = String(wa || '').replace(/\D/g, '');
+        if (d.startsWith('60')) return '0' + d.slice(2);
+        return d;
+      }
+
+      function restoreMalaysiaPrefix(shortWa) {
+        var d = String(shortWa || '').replace(/\D/g, '');
+        if (!d) return '';
+        if (d.startsWith('0')) return '6' + d.slice(1);
+        if (!d.startsWith('60')) return '60' + d;
+        return d;
+      }
+
       function genOrderRef() {
-        const d = new Date();
-        const ymd = String(d.getFullYear()) +
+        var d = new Date();
+        var ymd = String(d.getFullYear()) +
           String(d.getMonth() + 1).padStart(2, '0') +
           String(d.getDate()).padStart(2, '0');
-        const rand = Math.floor(1000 + Math.random() * 9000);
+        var rand = Math.floor(1000 + Math.random() * 9000);
         return 'NFA-' + ymd + '-' + rand;
       }
 
       function getNowStamp() {
-        const d = new Date();
+        var d = new Date();
         return d.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }) +
           ', ' + d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
       }
@@ -1261,13 +1280,15 @@
         }
       }
 
-      // Compact Base64URL helpers
       function toBase64Url(str) {
         try {
-          const bytes = new TextEncoder().encode(str);
-          let bin = '';
-          for (let i = 0; i < bytes.length; i++) bin += String.fromCharCode(bytes[i]);
-          return btoa(bin).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+          if (typeof TextEncoder !== 'undefined') {
+            var bytes = new TextEncoder().encode(str);
+            var bin = '';
+            for (var i = 0; i < bytes.length; i++) bin += String.fromCharCode(bytes[i]);
+            return btoa(bin).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+          }
+          return btoa(unescape(encodeURIComponent(str))).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
         } catch (e) {
           return '';
         }
@@ -1275,12 +1296,15 @@
 
       function fromBase64Url(b64) {
         try {
-          let norm = b64.replace(/-/g, '+').replace(/_/g, '/');
+          var norm = String(b64 || '').replace(/-/g, '+').replace(/_/g, '/');
           while (norm.length % 4) norm += '=';
-          const bin = atob(norm);
-          const bytes = new Uint8Array(bin.length);
-          for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
-          return new TextDecoder().decode(bytes);
+          var bin = atob(norm);
+          if (typeof TextDecoder !== 'undefined') {
+            var bytes = new Uint8Array(bin.length);
+            for (var i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+            return new TextDecoder().decode(bytes);
+          }
+          return decodeURIComponent(escape(bin));
         } catch (e) {
           return '';
         }
@@ -1293,28 +1317,13 @@
           return '';
         }
       }
+
       function decodeSafePayload(str) {
         try {
           return JSON.parse(decodeURIComponent(str));
         } catch (e) {
           return null;
         }
-      }
-
-      // Check if menu structure still matches default 3 items (names & descriptions)
-      function isDefaultMenuStructure() {
-        if (!Array.isArray(config.menus) || config.menus.length !== 3) return false;
-        for (let i = 0; i < 3; i++) {
-          const cur = config.menus[i];
-          const def = DEFAULT_CONFIG.menus[i];
-          if ((cur.name || '').trim() !== def.name) return false;
-          if ((cur.desc || '').trim() !== def.desc) return false;
-          if (cur.photoUrl && cur.photoUrl.startsWith('http')) return false;
-        }
-        if ((config.storeName || 'NFA meals').trim() !== 'NFA meals') return false;
-        if ((config.introText || DEFAULT_INTRO).trim() !== DEFAULT_INTRO.trim()) return false;
-        if ((config.closedMsg || DEFAULT_CLOSED).trim() !== DEFAULT_CLOSED.trim()) return false;
-        return true;
       }
 
       function applyCompactData(data) {
@@ -1343,12 +1352,12 @@
       }
 
       function parseCustomerHash(hash) {
-        if (!hash.startsWith('#o=')) return false;
-        const payload = hash.slice(3);
+        if (!hash || !hash.startsWith('#o=')) return false;
+        var payload = hash.slice(3);
+        if (!payload) return false;
 
-        // 1. Base64URL compact custom menu (#o=b....)
         if (payload.startsWith('b.')) {
-          const jsonStr = fromBase64Url(payload.slice(2));
+          var jsonStr = fromBase64Url(payload.slice(2));
           if (!jsonStr) return false;
           try {
             return applyCompactData(JSON.parse(jsonStr));
@@ -1357,26 +1366,39 @@
           }
         }
 
-        // 2. Legacy URI-encoded JSON (#o=%7B...%7D)
         if (payload.startsWith('%7B') || payload.startsWith('{')) {
           return applyCompactData(decodeSafePayload(payload));
         }
 
-        // 3. Ultra-short tilde format: #o=<1|0>~<wa>~<mask>~<prices>~<fee>~<qrUrl>
-        const parts = decodeURIComponent(payload).split('~');
+        var parts = [];
+        try {
+          parts = decodeURIComponent(payload).split('~');
+        } catch (e) {
+          parts = payload.split('~');
+        }
+
         if (parts[0] === '0') config.isOpen = false;
         else if (parts[0] === '1') config.isOpen = true;
 
-        if (parts[1]) config.whatsapp = parts[1];
+        if (parts[1]) {
+          config.whatsapp = restoreMalaysiaPrefix(parts[1]);
+        }
 
-        if (parts[2] && parts[2].length === config.menus.length) {
-          config.menus.forEach(function (m, idx) {
-            m.available = parts[2][idx] === '1';
-          });
+        if (parts[2]) {
+          if (/^[0-7]$/.test(parts[2])) {
+            var maskNum = parseInt(parts[2], 10);
+            config.menus.forEach(function (m, idx) {
+              if (idx < 3) m.available = Boolean((maskNum >> idx) & 1);
+            });
+          } else if (/^[01]+$/.test(parts[2])) {
+            config.menus.forEach(function (m, idx) {
+              if (idx < parts[2].length) m.available = parts[2][idx] === '1';
+            });
+          }
         }
 
         if (parts[3]) {
-          const prices = parts[3].split(',');
+          var prices = parts[3].split(',');
           config.menus.forEach(function (m, idx) {
             if (prices[idx] && !isNaN(parseFloat(prices[idx]))) {
               m.price = parseFloat(prices[idx]);
@@ -1395,10 +1417,10 @@
       }
 
       function loadState() {
-        const saved = safeGet(STORAGE_KEY);
+        var saved = safeGet(STORAGE_KEY) || safeGet('nfa_meals_cfg_v9');
         if (saved) {
           try {
-            const parsed = JSON.parse(saved);
+            var parsed = JSON.parse(saved);
             if (parsed && typeof parsed === 'object') {
               config = Object.assign(JSON.parse(JSON.stringify(DEFAULT_CONFIG)), parsed);
               if (!Array.isArray(config.menus) || config.menus.length === 0) {
@@ -1408,27 +1430,27 @@
           } catch (e) {}
         }
 
-        const hash = window.location.hash || '';
+        var hash = window.location.hash || '';
         if (hash.startsWith('#o=')) {
           isCustomerLinkMode = parseCustomerHash(hash);
         }
 
         quantities = {};
-        const firstAvail = config.menus.find(function (m) { return m.available; });
+        var firstAvail = config.menus.find(function (m) { return m.available; });
         if (firstAvail && config.isOpen) {
           quantities[firstAvail.id] = 1;
         }
       }
 
       function getQuote() {
-        const items = [];
-        let totalPax = 0;
-        let foodSubtotal = 0;
+        var items = [];
+        var totalPax = 0;
+        var foodSubtotal = 0;
 
         config.menus.forEach(function (m, idx) {
-          const qty = m.available ? (quantities[m.id] || 0) : 0;
+          var qty = m.available ? (quantities[m.id] || 0) : 0;
           if (qty > 0) {
-            const lineTotal = qty * m.price;
+            var lineTotal = qty * m.price;
             items.push({
               id: m.id,
               num: idx + 1,
@@ -1442,7 +1464,7 @@
           }
         });
 
-        const fee = totalPax > 0 ? Number(config.fee || 0) : 0;
+        var fee = totalPax > 0 ? Number(config.fee || 0) : 0;
         return {
           items: items,
           totalPax: totalPax,
@@ -1454,98 +1476,106 @@
 
       // ==================== RENDER CUSTOMER VIEW ====================
       function renderCustomerView() {
-        document.getElementById('headerStoreName').textContent = config.storeName || 'NFA meals';
-        document.getElementById('custIntroText').textContent = config.introText || DEFAULT_INTRO;
+        if ($('headerStoreName')) $('headerStoreName').textContent = config.storeName || 'NFA meals';
+        if ($('custIntroText')) $('custIntroText').textContent = config.introText || DEFAULT_INTRO;
 
-        const pill = document.getElementById('headerStatusPill');
-        const closedBanner = document.getElementById('closedBanner');
-        if (config.isOpen) {
-          pill.className = 'status-pill open';
-          pill.innerHTML = '<span class="status-dot"></span> OPEN';
-          closedBanner.classList.remove('show');
-        } else {
-          pill.className = 'status-pill closed';
-          pill.innerHTML = '<span class="status-dot"></span> CLOSED';
-          document.getElementById('closedBannerText').textContent = config.closedMsg || DEFAULT_CLOSED;
-          closedBanner.classList.add('show');
+        var pill = $('headerStatusPill');
+        var closedBanner = $('closedBanner');
+        if (pill && closedBanner) {
+          if (config.isOpen) {
+            pill.className = 'status-pill open';
+            pill.innerHTML = '<span class="status-dot"></span> OPEN';
+            closedBanner.classList.remove('show');
+          } else {
+            pill.className = 'status-pill closed';
+            pill.innerHTML = '<span class="status-dot"></span> CLOSED';
+            if ($('closedBannerText')) $('closedBannerText').textContent = config.closedMsg || DEFAULT_CLOSED;
+            closedBanner.classList.add('show');
+          }
         }
 
-        const grid = document.getElementById('menuGrid');
-        grid.innerHTML = config.menus.map(function (m, idx) {
-          const qty = m.available ? (quantities[m.id] || 0) : 0;
-          const disabledAll = !config.isOpen || !m.available;
-          const photoSrc = m.photoData || m.photoUrl || '';
-          const photoHtml = photoSrc
-            ? '<div class="menu-photo-wrap" data-action="zoom-photo" data-idx="' + idx + '">' +
-                '<img src="' + esc(photoSrc) + '" alt="' + esc(m.name) + '" />' +
-                '<span class="photo-zoom-tag">🔍 View Photo</span>' +
-              '</div>'
-            : '';
+        var grid = $('menuGrid');
+        if (grid) {
+          grid.innerHTML = config.menus.map(function (m, idx) {
+            var qty = m.available ? (quantities[m.id] || 0) : 0;
+            var disabledAll = !config.isOpen || !m.available;
+            var photoSrc = m.photoData || m.photoUrl || '';
+            var photoHtml = photoSrc
+              ? '<div class="menu-photo-wrap" data-action="zoom-photo" data-idx="' + idx + '">' +
+                  '<img src="' + esc(photoSrc) + '" alt="' + esc(m.name) + '" />' +
+                  '<span class="photo-zoom-tag">🔍 View Photo</span>' +
+                '</div>'
+              : '';
 
-          return (
-            '<div class="menu-card ' + (qty > 0 ? 'selected' : '') + ' ' + (!m.available ? 'sold-out' : '') + '">' +
-              '<div>' +
-                photoHtml +
-                '<div class="menu-card-top">' +
-                  '<div class="menu-name">' + (idx + 1) + '. ' + esc(m.name) + '</div>' +
-                  '<div class="menu-price">' + formatRM(m.price) + ' <small>/pax</small></div>' +
+            return (
+              '<div class="menu-card ' + (qty > 0 ? 'selected' : '') + ' ' + (!m.available ? 'sold-out' : '') + '">' +
+                '<div>' +
+                  photoHtml +
+                  '<div class="menu-card-top">' +
+                    '<div class="menu-name">' + (idx + 1) + '. ' + esc(m.name) + '</div>' +
+                    '<div class="menu-price">' + formatRM(m.price) + ' <small>/pax</small></div>' +
+                  '</div>' +
+                  '<div class="menu-desc">' + esc(m.desc) + '</div>' +
                 '</div>' +
-                '<div class="menu-desc">' + esc(m.desc) + '</div>' +
-              '</div>' +
-              '<div class="menu-footer">' +
-                (m.available
-                  ? '<span class="max-hint">Max ' + MAX_PAX_PER_MEAL + ' pax</span>' +
-                    '<div class="stepper">' +
-                      '<button type="button" class="step-btn" data-action="qty-dec" data-idx="' + idx + '" ' + (disabledAll || qty <= 0 ? 'disabled' : '') + '>−</button>' +
-                      '<span class="step-qty">' + qty + '</span>' +
-                      '<button type="button" class="step-btn" data-action="qty-inc" data-idx="' + idx + '" ' + (disabledAll || qty >= MAX_PAX_PER_MEAL ? 'disabled' : '') + '>+</button>' +
-                    '</div>'
-                  : '<span class="sold-badge">Sold Out</span>') +
-              '</div>' +
-            '</div>'
-          );
-        }).join('');
-
-        const q = getQuote();
-        const linesEl = document.getElementById('quoteLines');
-        if (q.items.length === 0) {
-          linesEl.innerHTML = '<div class="quote-line" style="color:var(--muted);"><span>Select at least 1 meal above</span><span>RM 0.00</span></div>';
-        } else {
-          linesEl.innerHTML = q.items.map(function (it) {
-            return '<div class="quote-line"><span>' + it.qty + ' × ' + esc(it.name) + ' (' + formatRM(it.price) + ')</span><span>' + formatRM(it.lineTotal) + '</span></div>';
+                '<div class="menu-footer">' +
+                  (m.available
+                    ? '<span class="max-hint">Max ' + MAX_PAX_PER_MEAL + ' pax</span>' +
+                      '<div class="stepper">' +
+                        '<button type="button" class="step-btn" data-action="qty-dec" data-idx="' + idx + '" ' + (disabledAll || qty <= 0 ? 'disabled' : '') + '>−</button>' +
+                        '<span class="step-qty">' + qty + '</span>' +
+                        '<button type="button" class="step-btn" data-action="qty-inc" data-idx="' + idx + '" ' + (disabledAll || qty >= MAX_PAX_PER_MEAL ? 'disabled' : '') + '>+</button>' +
+                      '</div>'
+                    : '<span class="sold-badge">Sold Out</span>') +
+                '</div>' +
+              '</div>'
+            );
           }).join('');
         }
 
-        document.getElementById('totalPaxText').textContent = q.totalPax;
-        document.getElementById('foodSubtotalText').textContent = formatRM(q.foodSubtotal);
-        document.getElementById('transportFeeText').textContent = formatRM(q.fee);
-        document.getElementById('grandTotalText').textContent = formatRM(q.grandTotal);
-        document.getElementById('qrAmountPrompt').textContent = formatRM(q.grandTotal);
-
-        const qrSrc = config.qrData || config.qrUrl || '';
-        const qrImg = document.getElementById('custQrImg');
-        const qrPh = document.getElementById('custQrPlaceholder');
-        if (qrSrc) {
-          qrImg.src = qrSrc;
-          qrImg.style.display = 'block';
-          qrPh.style.display = 'none';
-        } else {
-          qrImg.style.display = 'none';
-          qrPh.style.display = 'block';
+        var q = getQuote();
+        var linesEl = $('quoteLines');
+        if (linesEl) {
+          if (q.items.length === 0) {
+            linesEl.innerHTML = '<div class="quote-line" style="color:var(--muted);"><span>Select at least 1 meal above</span><span>RM 0.00</span></div>';
+          } else {
+            linesEl.innerHTML = q.items.map(function (it) {
+              return '<div class="quote-line"><span>' + it.qty + ' × ' + esc(it.name) + ' (' + formatRM(it.price) + ')</span><span>' + formatRM(it.lineTotal) + '</span></div>';
+            }).join('');
+          }
         }
 
-        const canOrder = config.isOpen && q.totalPax > 0;
-        document.getElementById('sendWhatsappBtn').disabled = !canOrder;
-        document.getElementById('confirmPaidBtn').disabled = !canOrder;
-        document.getElementById('viewReceiptBtn').disabled = !canOrder;
+        if ($('totalPaxText')) $('totalPaxText').textContent = q.totalPax;
+        if ($('foodSubtotalText')) $('foodSubtotalText').textContent = formatRM(q.foodSubtotal);
+        if ($('transportFeeText')) $('transportFeeText').textContent = formatRM(q.fee);
+        if ($('grandTotalText')) $('grandTotalText').textContent = formatRM(q.grandTotal);
+        if ($('qrAmountPrompt')) $('qrAmountPrompt').textContent = formatRM(q.grandTotal);
+
+        var qrSrc = config.qrData || config.qrUrl || '';
+        var qrImg = $('custQrImg');
+        var qrPh = $('custQrPlaceholder');
+        if (qrImg && qrPh) {
+          if (qrSrc) {
+            qrImg.src = qrSrc;
+            qrImg.style.display = 'block';
+            qrPh.style.display = 'none';
+          } else {
+            qrImg.style.display = 'none';
+            qrPh.style.display = 'block';
+          }
+        }
+
+        var canOrder = config.isOpen && q.totalPax > 0;
+        if ($('sendWhatsappBtn')) $('sendWhatsappBtn').disabled = !canOrder;
+        if ($('confirmPaidBtn')) $('confirmPaidBtn').disabled = !canOrder;
+        if ($('viewReceiptBtn')) $('viewReceiptBtn').disabled = !canOrder;
       }
 
       function buildOrderMessage(refId) {
-        const q = getQuote();
-        const name = (document.getElementById('custName').value || '').trim() || 'Customer';
-        const phone = (document.getElementById('custPhone').value || '').trim() || '-';
-        const notes = (document.getElementById('custNotes').value || '').trim();
-        const itemLines = q.items.map(function (i) {
+        var q = getQuote();
+        var name = ($('custName') ? $('custName').value : '').trim() || 'Customer';
+        var phone = ($('custPhone') ? $('custPhone').value : '').trim() || '-';
+        var notes = ($('custNotes') ? $('custNotes').value : '').trim();
+        var itemLines = q.items.map(function (i) {
           return '• ' + i.qty + 'x ' + i.name + ' = ' + formatRM(i.lineTotal);
         }).join('\n');
 
@@ -1568,7 +1598,7 @@
       }
 
       function getOrderLog() {
-        const raw = safeGet(LOG_KEY);
+        var raw = safeGet(LOG_KEY) || safeGet('nfa_meals_log_v9');
         try { return raw ? JSON.parse(raw) : []; } catch (e) { return []; }
       }
 
@@ -1578,22 +1608,24 @@
 
       function recordCustomerSubmission(openWhatsApp) {
         if (!config.isOpen) return;
-        const q = getQuote();
+        var q = getQuote();
         if (q.totalPax === 0) return showToast('Please select at least 1 meal');
 
-        const name = (document.getElementById('custName').value || '').trim();
-        const phone = (document.getElementById('custPhone').value || '').trim();
+        var nameEl = $('custName');
+        var phoneEl = $('custPhone');
+        var name = (nameEl ? nameEl.value : '').trim();
+        var phone = (phoneEl ? phoneEl.value : '').trim();
         if (!name) {
-          document.getElementById('custName').focus();
+          if (nameEl) nameEl.focus();
           return showToast('Please enter your name');
         }
         if (!phone) {
-          document.getElementById('custPhone').focus();
+          if (phoneEl) phoneEl.focus();
           return showToast('Please enter your phone number');
         }
 
-        const refId = genOrderRef();
-        const list = getOrderLog();
+        var refId = genOrderRef();
+        var list = getOrderLog();
         list.unshift({
           refId: refId,
           time: getNowStamp(),
@@ -1611,14 +1643,14 @@
         });
         saveOrderLog(list);
 
-        document.getElementById('pendingRefCode').textContent = refId;
-        document.getElementById('pendingOrderBanner').classList.add('show');
+        if ($('pendingRefCode')) $('pendingRefCode').textContent = refId;
+        if ($('pendingOrderBanner')) $('pendingOrderBanner').classList.add('show');
         showToast('Order ' + refId + ' submitted!');
 
         if (openWhatsApp) {
-          const text = buildOrderMessage(refId);
-          const waNum = cleanPhone(config.whatsapp);
-          const url = waNum
+          var text = buildOrderMessage(refId);
+          var waNum = cleanPhone(config.whatsapp);
+          var url = waNum
             ? 'https://wa.me/' + waNum + '?text=' + encodeURIComponent(text)
             : 'https://wa.me/?text=' + encodeURIComponent(text);
           window.open(url, '_blank');
@@ -1627,8 +1659,8 @@
 
       // ==================== OFFICIAL RECEIPT VIEW (#r=...) ====================
       function buildOfficialReceiptUrl(order) {
-        const baseUrl = window.location.href.split('#')[0].split('?')[0];
-        const compact = {
+        var baseUrl = window.location.href.split('#')[0].split('?')[0];
+        var compact = {
           id: order.refId,
           s: config.storeName || 'NFA meals',
           n: order.name,
@@ -1640,13 +1672,13 @@
             return { n: it.name, q: it.qty, p: it.price };
           })
         };
-        const b64 = toBase64Url(JSON.stringify(compact));
+        var b64 = toBase64Url(JSON.stringify(compact));
         return baseUrl + '#r=' + (b64 || encodeSafePayload(compact));
       }
 
       function buildOfficialReceiptText(order, url) {
-        const lines = (order.items || []).map(function (it) {
-          const sub = (Number(it.qty) || 0) * (Number(it.price) || 0);
+        var lines = (order.items || []).map(function (it) {
+          var sub = (Number(it.qty) || 0) * (Number(it.price) || 0);
           return '• ' + it.qty + 'x ' + it.name + ' = ' + formatRM(sub);
         }).join('\n');
 
@@ -1671,15 +1703,15 @@
 
       function renderOfficialReceiptPage(data) {
         activeReceiptData = data;
-        document.getElementById('customerView').style.display = 'none';
-        document.getElementById('sellerView').style.display = 'none';
-        document.getElementById('topNavTabs').style.display = 'none';
-        document.getElementById('officialReceiptView').style.display = 'block';
+        if ($('customerView')) $('customerView').style.display = 'none';
+        if ($('sellerView')) $('sellerView').style.display = 'none';
+        if ($('topNavTabs')) $('topNavTabs').style.display = 'none';
+        if ($('officialReceiptView')) $('officialReceiptView').style.display = 'block';
 
-        const items = data.i || [];
-        let foodSum = 0;
-        const rowsHtml = items.map(function (it) {
-          const line = (Number(it.q) || 0) * (Number(it.p) || 0);
+        var items = data.i || [];
+        var foodSum = 0;
+        var rowsHtml = items.map(function (it) {
+          var line = (Number(it.q) || 0) * (Number(it.p) || 0);
           foodSum += line;
           return (
             '<div style="display:flex; justify-content:space-between; padding:6px 0; border-bottom:1px dashed #e2e8f0; font-size:13.5px;">' +
@@ -1689,90 +1721,96 @@
           );
         }).join('');
 
-        document.getElementById('officialReceiptCardBody').innerHTML =
-          '<div style="text-align:center; border-bottom:1.5px solid #e2e8f0; padding-bottom:14px; margin-bottom:14px;">' +
-            '<div class="verified-stamp">✓ PAYMENT VERIFIED BY SELLER</div>' +
-            '<h2 style="font-size:20px; font-weight:900; margin-top:10px;">' + esc(data.s || 'NFA meals') + '</h2>' +
-            '<div style="font-size:12px; color:#64748b; font-weight:700;">Official Customer Payment Receipt</div>' +
-          '</div>' +
-          '<div style="font-size:13px; display:grid; gap:6px; margin-bottom:14px; background:#f8fafc; padding:12px; border-radius:12px;">' +
-            '<div style="display:flex; justify-content:space-between;"><span style="color:#64748b;">Receipt No:</span><strong>' + esc(data.id) + '</strong></div>' +
-            '<div style="display:flex; justify-content:space-between;"><span style="color:#64748b;">Verified At:</span><strong>' + esc(data.t) + '</strong></div>' +
-            '<div style="display:flex; justify-content:space-between;"><span style="color:#64748b;">Customer:</span><strong>' + esc(data.n) + '</strong></div>' +
-            '<div style="display:flex; justify-content:space-between;"><span style="color:#64748b;">Phone:</span><strong>' + esc(data.p) + '</strong></div>' +
-            '<div style="display:flex; justify-content:space-between;"><span style="color:#64748b;">Pickup:</span><strong>Library UMS • 12:00 PM</strong></div>' +
-          '</div>' +
-          '<div style="font-size:12px; font-weight:800; text-transform:uppercase; color:#64748b; margin-bottom:6px;">Meals Purchased</div>' +
-          rowsHtml +
-          '<div style="margin-top:12px; font-size:13.5px; display:grid; gap:6px;">' +
-            '<div style="display:flex; justify-content:space-between;"><span>Food Subtotal</span><span>' + formatRM(foodSum) + '</span></div>' +
-            '<div style="display:flex; justify-content:space-between;"><span>Library UMS Transport Fee</span><span>' + formatRM(data.f) + '</span></div>' +
-          '</div>' +
-          '<div class="quote-total-row" style="background:#15803d; margin-top:12px;">' +
-            '<span class="quote-total-label" style="color:#dcfce7;">TOTAL VERIFIED PAID</span>' +
-            '<span class="quote-total-val">' + formatRM(data.g) + '</span>' +
-          '</div>' +
-          '<div style="text-align:center; font-size:11.5px; color:#64748b; margin-top:12px;">' +
-            'Please show this Official Receipt upon 12:00 PM collection at Library UMS.' +
-          '</div>';
+        if ($('officialReceiptCardBody')) {
+          $('officialReceiptCardBody').innerHTML =
+            '<div style="text-align:center; border-bottom:1.5px solid #e2e8f0; padding-bottom:14px; margin-bottom:14px;">' +
+              '<div class="verified-stamp">✓ PAYMENT VERIFIED BY SELLER</div>' +
+              '<h2 style="font-size:20px; font-weight:900; margin-top:10px;">' + esc(data.s || 'NFA meals') + '</h2>' +
+              '<div style="font-size:12px; color:#64748b; font-weight:700;">Official Customer Payment Receipt</div>' +
+            '</div>' +
+            '<div style="font-size:13px; display:grid; gap:6px; margin-bottom:14px; background:#f8fafc; padding:12px; border-radius:12px;">' +
+              '<div style="display:flex; justify-content:space-between;"><span style="color:#64748b;">Receipt No:</span><strong>' + esc(data.id) + '</strong></div>' +
+              '<div style="display:flex; justify-content:space-between;"><span style="color:#64748b;">Verified At:</span><strong>' + esc(data.t) + '</strong></div>' +
+              '<div style="display:flex; justify-content:space-between;"><span style="color:#64748b;">Customer:</span><strong>' + esc(data.n) + '</strong></div>' +
+              '<div style="display:flex; justify-content:space-between;"><span style="color:#64748b;">Phone:</span><strong>' + esc(data.p) + '</strong></div>' +
+              '<div style="display:flex; justify-content:space-between;"><span style="color:#64748b;">Pickup:</span><strong>Library UMS • 12:00 PM</strong></div>' +
+            '</div>' +
+            '<div style="font-size:12px; font-weight:800; text-transform:uppercase; color:#64748b; margin-bottom:6px;">Meals Purchased</div>' +
+            rowsHtml +
+            '<div style="margin-top:12px; font-size:13.5px; display:grid; gap:6px;">' +
+              '<div style="display:flex; justify-content:space-between;"><span>Food Subtotal</span><span>' + formatRM(foodSum) + '</span></div>' +
+              '<div style="display:flex; justify-content:space-between;"><span>Library UMS Transport Fee</span><span>' + formatRM(data.f) + '</span></div>' +
+            '</div>' +
+            '<div class="quote-total-row" style="background:#15803d; margin-top:12px;">' +
+              '<span class="quote-total-label" style="color:#dcfce7;">TOTAL VERIFIED PAID</span>' +
+              '<span class="quote-total-val">' + formatRM(data.g) + '</span>' +
+            '</div>' +
+            '<div style="text-align:center; font-size:11.5px; color:#64748b; margin-top:12px;">' +
+              'Please show this Official Receipt upon 12:00 PM collection at Library UMS.' +
+            '</div>';
+        }
       }
 
       // ==================== SELLER VIEW & MENU BUILDER ====================
       function switchTab(tab) {
-        const custView = document.getElementById('customerView');
-        const sellView = document.getElementById('sellerView');
-        const recView = document.getElementById('officialReceiptView');
-        const btnC = document.getElementById('tabCustomerBtn');
-        const btnS = document.getElementById('tabSellerBtn');
+        var custView = $('customerView');
+        var sellView = $('sellerView');
+        var recView = $('officialReceiptView');
+        var btnC = $('tabCustomerBtn');
+        var btnS = $('tabSellerBtn');
 
-        recView.style.display = 'none';
+        if (recView) recView.style.display = 'none';
         if (tab === 'seller') {
-          custView.style.display = 'none';
-          sellView.style.display = 'block';
-          btnC.classList.remove('active');
-          btnS.classList.add('active');
+          if (custView) custView.style.display = 'none';
+          if (sellView) sellView.style.display = 'block';
+          if (btnC) btnC.classList.remove('active');
+          if (btnS) btnS.classList.add('active');
           populateSellerView();
         } else {
-          sellView.style.display = 'none';
-          custView.style.display = 'block';
-          btnS.classList.remove('active');
-          btnC.classList.add('active');
+          if (sellView) sellView.style.display = 'none';
+          if (custView) custView.style.display = 'block';
+          if (btnS) btnS.classList.remove('active');
+          if (btnC) btnC.classList.add('active');
           renderCustomerView();
         }
       }
 
       function populateSellerView() {
-        document.getElementById('sellerStoreName').value = config.storeName || 'NFA meals';
-        document.getElementById('sellerWhatsapp').value = config.whatsapp || '';
-        document.getElementById('sellerIntroText').value = config.introText || DEFAULT_INTRO;
-        document.getElementById('sellerFee').value = Number(config.fee || 5).toFixed(2);
-        document.getElementById('sellerClosedMsg').value = config.closedMsg || DEFAULT_CLOSED;
-        document.getElementById('sellerQrUrl').value = config.qrUrl || '';
+        if ($('sellerStoreName')) $('sellerStoreName').value = config.storeName || 'NFA meals';
+        if ($('sellerWhatsapp')) $('sellerWhatsapp').value = config.whatsapp || '';
+        if ($('sellerIntroText')) $('sellerIntroText').value = config.introText || DEFAULT_INTRO;
+        if ($('sellerFee')) $('sellerFee').value = Number(config.fee || 5).toFixed(2);
+        if ($('sellerClosedMsg')) $('sellerClosedMsg').value = config.closedMsg || DEFAULT_CLOSED;
+        if ($('sellerQrUrl')) $('sellerQrUrl').value = config.qrUrl || '';
 
-        const card = document.getElementById('sellerStatusCard');
-        const heading = document.getElementById('sellerStatusHeading');
-        const bOpen = document.getElementById('btnSetOpen');
-        const bClosed = document.getElementById('btnSetClosed');
-        if (config.isOpen) {
-          card.classList.remove('is-closed');
-          heading.textContent = '🟢 Store Status: OPEN for Orders';
-          bOpen.className = 'toggle-opt active-open';
-          bClosed.className = 'toggle-opt';
-        } else {
-          card.classList.add('is-closed');
-          heading.textContent = '🔴 Store Status: CLOSED (Orders Paused)';
-          bOpen.className = 'toggle-opt';
-          bClosed.className = 'toggle-opt active-closed';
+        var card = $('sellerStatusCard');
+        var heading = $('sellerStatusHeading');
+        var bOpen = $('btnSetOpen');
+        var bClosed = $('btnSetClosed');
+        if (card && heading && bOpen && bClosed) {
+          if (config.isOpen) {
+            card.classList.remove('is-closed');
+            heading.textContent = '🟢 Store Status: OPEN for Orders';
+            bOpen.className = 'toggle-opt active-open';
+            bClosed.className = 'toggle-opt';
+          } else {
+            card.classList.add('is-closed');
+            heading.textContent = '🔴 Store Status: CLOSED (Orders Paused)';
+            bOpen.className = 'toggle-opt';
+            bClosed.className = 'toggle-opt active-closed';
+          }
         }
 
-        const qrSrc = config.qrData || config.qrUrl || '';
-        const qrWrap = document.getElementById('sellerQrPreviewWrap');
-        const qrPrev = document.getElementById('sellerQrPreview');
-        if (qrSrc) {
-          qrPrev.src = qrSrc;
-          qrWrap.style.display = 'block';
-        } else {
-          qrWrap.style.display = 'none';
+        var qrSrc = config.qrData || config.qrUrl || '';
+        var qrWrap = $('sellerQrPreviewWrap');
+        var qrPrev = $('sellerQrPreview');
+        if (qrWrap && qrPrev) {
+          if (qrSrc) {
+            qrPrev.src = qrSrc;
+            qrWrap.style.display = 'block';
+          } else {
+            qrWrap.style.display = 'none';
+          }
         }
 
         renderSellerMenuBuilder();
@@ -1781,9 +1819,10 @@
       }
 
       function renderSellerMenuBuilder() {
-        const container = document.getElementById('sellerMenuEditor');
+        var container = $('sellerMenuEditor');
+        if (!container) return;
         container.innerHTML = config.menus.map(function (m, idx) {
-          const thumb = m.photoData || m.photoUrl || '';
+          var thumb = m.photoData || m.photoUrl || '';
           return (
             '<div class="seller-meal-box">' +
               '<div class="seller-meal-head">' +
@@ -1827,22 +1866,24 @@
       }
 
       function saveSettings(showSavedBadge) {
-        config.storeName = (document.getElementById('sellerStoreName').value || '').trim() || 'NFA meals';
-        config.whatsapp = cleanPhone(document.getElementById('sellerWhatsapp').value);
-        config.introText = (document.getElementById('sellerIntroText').value || '').trim() || DEFAULT_INTRO;
-        const feeVal = parseFloat(document.getElementById('sellerFee').value);
-        config.fee = !isNaN(feeVal) && feeVal >= 0 ? feeVal : 5.00;
-        config.closedMsg = (document.getElementById('sellerClosedMsg').value || '').trim() || DEFAULT_CLOSED;
-        config.qrUrl = (document.getElementById('sellerQrUrl').value || '').trim();
+        if ($('sellerStoreName')) config.storeName = ($('sellerStoreName').value || '').trim() || 'NFA meals';
+        if ($('sellerWhatsapp')) config.whatsapp = cleanPhone($('sellerWhatsapp').value);
+        if ($('sellerIntroText')) config.introText = ($('sellerIntroText').value || '').trim() || DEFAULT_INTRO;
+        if ($('sellerFee')) {
+          var feeVal = parseFloat($('sellerFee').value);
+          config.fee = !isNaN(feeVal) && feeVal >= 0 ? feeVal : 5.00;
+        }
+        if ($('sellerClosedMsg')) config.closedMsg = ($('sellerClosedMsg').value || '').trim() || DEFAULT_CLOSED;
+        if ($('sellerQrUrl')) config.qrUrl = ($('sellerQrUrl').value || '').trim();
 
-        const ok = safeSet(STORAGE_KEY, JSON.stringify(config));
+        var ok = safeSet(STORAGE_KEY, JSON.stringify(config));
         if (!ok) {
           showToast('Storage full — try smaller images');
         }
         refreshShareLinks();
 
-        if (showSavedBadge) {
-          const b = document.getElementById('savedBadge');
+        if (showSavedBadge && $('savedBadge')) {
+          var b = $('savedBadge');
           b.style.display = 'inline';
           clearTimeout(window._nfaSaved);
           window._nfaSaved = setTimeout(function () { b.style.display = 'none'; }, 1800);
@@ -1850,96 +1891,68 @@
       }
 
       function refreshShareLinks() {
-        const baseUrl = window.location.href.split('#')[0].split('?')[0];
-        let custUrl = '';
+        var baseUrl = window.location.href.split('#')[0].split('?')[0];
+        var openBit = config.isOpen ? '1' : '0';
+        var shortWa = stripMalaysiaPrefix(config.whatsapp || '');
 
-        if (isDefaultMenuStructure()) {
-          // Ultra-short tilde format: #o=<1|0>~<wa>~<mask>~<prices>~<fee>~<qrUrl>
-          const openBit = config.isOpen ? '1' : '0';
-          const wa = config.whatsapp || '';
-          const mask = config.menus.map(function (m) { return m.available ? '1' : '0'; }).join('');
-          const prices = config.menus.map(function (m) { return Number(m.price); }).join(',');
-          const fee = Number(config.fee || 5);
-          const qrToken = config.qrUrl && config.qrUrl.startsWith('http') ? config.qrUrl : '';
-
-          const isDefaultMask = mask === '111';
-          const isDefaultPrices = prices === '10,12.5,15';
-          const isDefaultFee = fee === 5;
-
-          const parts = [
-            openBit,
-            wa,
-            (isDefaultMask && isDefaultPrices && isDefaultFee && !qrToken) ? '' : mask,
-            (isDefaultPrices && isDefaultFee && !qrToken) ? '' : prices,
-            (isDefaultFee && !qrToken) ? '' : String(fee),
-            qrToken
-          ];
-          while (parts.length > 2 && parts[parts.length - 1] === '') {
-            parts.pop();
-          }
-          custUrl = baseUrl + '#o=' + parts.join('~');
-        } else {
-          // Compact Base64URL when menu items/names/descriptions are customized
-          const compact = {
-            o: config.isOpen,
-            w: config.whatsapp || '',
-            s: config.storeName || 'NFA meals',
-            i: config.introText || DEFAULT_INTRO,
-            c: config.closedMsg || DEFAULT_CLOSED,
-            f: Number(config.fee || 5),
-            q: config.qrUrl && config.qrUrl.startsWith('http') ? config.qrUrl : '',
-            m: config.menus.map(function (m) {
-              return {
-                id: m.id,
-                n: m.name,
-                p: Number(m.price),
-                d: m.desc,
-                a: !!m.available,
-                u: m.photoUrl && m.photoUrl.startsWith('http') ? m.photoUrl : ''
-              };
-            })
-          };
-          const b64 = toBase64Url(JSON.stringify(compact));
-          custUrl = baseUrl + '#o=' + (b64 ? ('b.' + b64) : encodeSafePayload(compact));
+        var maskNum = 0;
+        for (var i = 0; i < Math.min(3, config.menus.length); i++) {
+          if (config.menus[i].available) maskNum |= (1 << i);
         }
 
-        const adminUrl = baseUrl + '#setup';
+        var suffix = openBit + (shortWa ? '~' + shortWa : '');
+        if (maskNum !== 7 && (suffix.length + 2) <= 15) {
+          suffix += '~' + maskNum;
+        }
+        if (suffix.length > 15) {
+          suffix = suffix.slice(0, 15);
+        }
 
-        document.getElementById('shortCustomerLinkInput').value = custUrl;
-        document.getElementById('cleanDirectLinkInput').value = baseUrl;
-        document.getElementById('sellerAdminLinkInput').value = adminUrl;
-        document.getElementById('shortLinkChars').textContent = 'Short Link • ' + custUrl.length + ' chars';
+        var custUrl = baseUrl + '#o=' + suffix;
+        var adminUrl = baseUrl + '#setup';
+
+        if ($('shortCustomerLinkInput')) $('shortCustomerLinkInput').value = custUrl;
+        if ($('cleanDirectLinkInput')) $('cleanDirectLinkInput').value = baseUrl;
+        if ($('sellerAdminLinkInput')) $('sellerAdminLinkInput').value = adminUrl;
+        if ($('shortLinkChars')) $('shortLinkChars').textContent = 'Ultra-Short • ' + suffix.length + ' chars';
       }
 
-      // Safe lightweight image compressor (280px max, 0.68 JPEG)
       function compressImageFile(file, callback) {
         if (!file) return;
-        const objUrl = URL.createObjectURL(file);
-        const img = new Image();
+        var objUrl = '';
+        try {
+          objUrl = URL.createObjectURL(file);
+        } catch (e) {
+          showToast('Cannot read image file');
+          return;
+        }
+        var img = new Image();
         img.onload = function () {
           try {
-            const maxDim = 280;
-            let w = img.width;
-            let h = img.height;
+            var maxDim = 260;
+            var w = img.width;
+            var h = img.height;
             if (w > maxDim || h > maxDim) {
               if (w > h) { h = Math.round(h * maxDim / w); w = maxDim; }
               else { w = Math.round(w * maxDim / h); h = maxDim; }
             }
-            const canvas = document.createElement('canvas');
+            var canvas = document.createElement('canvas');
             canvas.width = w;
             canvas.height = h;
-            const ctx = canvas.getContext('2d');
-            ctx.drawImage(img, 0, 0, w, h);
-            const dataUrl = canvas.toDataURL('image/jpeg', 0.68);
-            callback(dataUrl);
+            var ctx = canvas.getContext('2d');
+            if (ctx) {
+              ctx.drawImage(img, 0, 0, w, h);
+              var dataUrl = canvas.toDataURL('image/jpeg', 0.65);
+              callback(dataUrl);
+            }
           } catch (e) {
             showToast('Could not process image');
           } finally {
-            URL.revokeObjectURL(objUrl);
+            try { URL.revokeObjectURL(objUrl); } catch (err) {}
           }
         };
         img.onerror = function () {
-          URL.revokeObjectURL(objUrl);
+          try { URL.revokeObjectURL(objUrl); } catch (err) {}
           showToast('Invalid image file');
         };
         img.src = objUrl;
@@ -1947,16 +1960,16 @@
 
       // ==================== TOTAL SALES & MEAL BREAKDOWN ====================
       function renderSalesDashboard() {
-        const list = getOrderLog();
-        const activeOrders = list.filter(function (o) { return o.status !== 'Cancelled'; });
-        const verifiedCount = activeOrders.filter(function (o) {
+        var list = getOrderLog();
+        var activeOrders = list.filter(function (o) { return o.status !== 'Cancelled'; });
+        var verifiedCount = activeOrders.filter(function (o) {
           return o.status === 'Verified Paid' || o.status === 'Collected';
         }).length;
 
-        let totalPax = 0;
-        let foodSales = 0;
-        let grandTotal = 0;
-        const mealTotals = {};
+        var totalPax = 0;
+        var foodSales = 0;
+        var grandTotal = 0;
+        var mealTotals = {};
 
         config.menus.forEach(function (m) {
           mealTotals[m.name] = { name: m.name, qty: 0, revenue: 0 };
@@ -1967,52 +1980,55 @@
           foodSales += Number(o.foodSubtotal) || 0;
           grandTotal += Number(o.total) || 0;
           (o.items || []).forEach(function (it) {
-            const key = it.name || 'Meal';
+            var key = it.name || 'Meal';
             if (!mealTotals[key]) mealTotals[key] = { name: key, qty: 0, revenue: 0 };
             mealTotals[key].qty += Number(it.qty) || 0;
             mealTotals[key].revenue += (Number(it.qty) || 0) * (Number(it.price) || 0);
           });
         });
 
-        document.getElementById('statOrders').textContent = activeOrders.length;
-        document.getElementById('statVerified').textContent = verifiedCount;
-        document.getElementById('statPax').textContent = totalPax;
-        document.getElementById('statFoodSales').textContent = formatRM(foodSales);
-        document.getElementById('statRevenue').textContent = formatRM(grandTotal);
+        if ($('statOrders')) $('statOrders').textContent = activeOrders.length;
+        if ($('statVerified')) $('statVerified').textContent = verifiedCount;
+        if ($('statPax')) $('statPax').textContent = totalPax;
+        if ($('statFoodSales')) $('statFoodSales').textContent = formatRM(foodSales);
+        if ($('statRevenue')) $('statRevenue').textContent = formatRM(grandTotal);
 
-        const breakdownEl = document.getElementById('mealBreakdownBox');
-        const mealArr = Object.values(mealTotals);
-        if (mealArr.length === 0) {
-          breakdownEl.innerHTML = '<div style="font-size:12.5px; color:var(--muted);">No meals configured.</div>';
-        } else {
-          breakdownEl.innerHTML =
-            '<div style="font-size:12px; font-weight:800; text-transform:uppercase; color:#475569; margin-bottom:8px;">Meals Purchased Breakdown</div>' +
-            mealArr.map(function (mt) {
-              const pct = totalPax > 0 ? Math.round((mt.qty / totalPax) * 100) : 0;
-              return (
-                '<div class="breakdown-row">' +
-                  '<div class="breakdown-meta">' +
-                    '<span>' + esc(mt.name) + ' — <strong>' + mt.qty + ' pax</strong> (' + pct + '%)</span>' +
-                    '<span>' + formatRM(mt.revenue) + '</span>' +
-                  '</div>' +
-                  '<div class="bar-track"><div class="bar-fill" style="width:' + pct + '%;"></div></div>' +
-                '</div>'
-              );
-            }).join('');
+        var breakdownEl = $('mealBreakdownBox');
+        if (breakdownEl) {
+          var mealArr = Object.values(mealTotals);
+          if (mealArr.length === 0) {
+            breakdownEl.innerHTML = '<div style="font-size:12.5px; color:var(--muted);">No meals configured.</div>';
+          } else {
+            breakdownEl.innerHTML =
+              '<div style="font-size:12px; font-weight:800; text-transform:uppercase; color:#475569; margin-bottom:8px;">Meals Purchased Breakdown</div>' +
+              mealArr.map(function (mt) {
+                var pct = totalPax > 0 ? Math.round((mt.qty / totalPax) * 100) : 0;
+                return (
+                  '<div class="breakdown-row">' +
+                    '<div class="breakdown-meta">' +
+                      '<span>' + esc(mt.name) + ' — <strong>' + mt.qty + ' pax</strong> (' + pct + '%)</span>' +
+                      '<span>' + formatRM(mt.revenue) + '</span>' +
+                    '</div>' +
+                    '<div class="bar-track"><div class="bar-fill" style="width:' + pct + '%;"></div></div>' +
+                  '</div>'
+                );
+              }).join('');
+          }
         }
 
-        const logListEl = document.getElementById('orderLogList');
+        var logListEl = $('orderLogList');
+        if (!logListEl) return;
         if (list.length === 0) {
           logListEl.innerHTML = '<div style="text-align:center; color:var(--muted); font-size:13px; padding:16px 0;">No orders recorded yet today.</div>';
           return;
         }
 
         logListEl.innerHTML = list.map(function (o, idx) {
-          const isVerified = o.status === 'Verified Paid' || o.status === 'Collected';
-          const badgeClass = o.status === 'Collected'
+          var isVerified = o.status === 'Verified Paid' || o.status === 'Collected';
+          var badgeClass = o.status === 'Collected'
             ? 'st-collected'
             : (o.status === 'Verified Paid' ? 'st-verified' : (o.status === 'Cancelled' ? 'st-cancelled' : 'st-pending'));
-          const itemsSummary = (o.items || []).map(function (i) { return i.qty + 'x ' + i.name; }).join(', ');
+          var itemsSummary = (o.items || []).map(function (i) { return i.qty + 'x ' + i.name; }).join(', ');
 
           return (
             '<div class="log-item ' + (isVerified ? 'verified' : '') + '">' +
@@ -2042,38 +2058,38 @@
 
       function openIssuedModalForOrder(order) {
         activeIssuedOrder = order;
-        const url = buildOfficialReceiptUrl(order);
-        const text = buildOfficialReceiptText(order, url);
-        document.getElementById('issuedReceiptLinkInput').value = url;
-        document.getElementById('issuedReceiptPreText').textContent = text;
-        document.getElementById('issuedReceiptModal').classList.add('open');
+        var url = buildOfficialReceiptUrl(order);
+        var text = buildOfficialReceiptText(order, url);
+        if ($('issuedReceiptLinkInput')) $('issuedReceiptLinkInput').value = url;
+        if ($('issuedReceiptPreText')) $('issuedReceiptPreText').textContent = text;
+        if ($('issuedReceiptModal')) $('issuedReceiptModal').classList.add('open');
       }
 
       // ==================== EVENT DELEGATION ====================
       document.addEventListener('click', function (e) {
-        const btn = e.target.closest('[data-action]');
+        var btn = e.target && e.target.closest ? e.target.closest('[data-action]') : null;
         if (!btn) return;
-        const action = btn.getAttribute('data-action');
-        const idx = parseInt(btn.getAttribute('data-idx') || '-1', 10);
+        var action = btn.getAttribute('data-action');
+        var idx = parseInt(btn.getAttribute('data-idx') || '-1', 10);
 
         if (action === 'tab-customer') switchTab('customer');
         else if (action === 'tab-seller') switchTab('seller');
         else if (action === 'qty-dec' && config.menus[idx]) {
-          const id = config.menus[idx].id;
-          quantities[id] = Math.max(0, (quantities[id] || 0) - 1);
+          var idDec = config.menus[idx].id;
+          quantities[idDec] = Math.max(0, (quantities[idDec] || 0) - 1);
           renderCustomerView();
         } else if (action === 'qty-inc' && config.menus[idx]) {
-          const id = config.menus[idx].id;
-          quantities[id] = Math.min(MAX_PAX_PER_MEAL, (quantities[id] || 0) + 1);
+          var idInc = config.menus[idx].id;
+          quantities[idInc] = Math.min(MAX_PAX_PER_MEAL, (quantities[idInc] || 0) + 1);
           renderCustomerView();
         } else if (action === 'zoom-photo' && config.menus[idx]) {
-          const m = config.menus[idx];
-          const src = m.photoData || m.photoUrl;
-          if (src) {
-            document.getElementById('photoModalTitle').textContent = m.name + ' (' + formatRM(m.price) + ')';
-            document.getElementById('photoModalImg').src = src;
-            document.getElementById('photoModalDesc').textContent = m.desc;
-            document.getElementById('photoModal').classList.add('open');
+          var mZoom = config.menus[idx];
+          var srcZoom = mZoom.photoData || mZoom.photoUrl;
+          if (srcZoom && $('photoModal')) {
+            if ($('photoModalTitle')) $('photoModalTitle').textContent = mZoom.name + ' (' + formatRM(mZoom.price) + ')';
+            if ($('photoModalImg')) $('photoModalImg').src = srcZoom;
+            if ($('photoModalDesc')) $('photoModalDesc').textContent = mZoom.desc;
+            $('photoModal').classList.add('open');
           }
         } else if (action === 'copy-exact-amount') {
           copyText(getQuote().grandTotal.toFixed(2), 'Copied ' + formatRM(getQuote().grandTotal));
@@ -2082,10 +2098,10 @@
         } else if (action === 'submit-direct') {
           recordCustomerSubmission(false);
         } else if (action === 'open-quote-modal') {
-          document.getElementById('receiptPreText').textContent = buildOrderMessage('PREVIEW');
-          document.getElementById('receiptModal').classList.add('open');
+          if ($('receiptPreText')) $('receiptPreText').textContent = buildOrderMessage('PREVIEW');
+          if ($('receiptModal')) $('receiptModal').classList.add('open');
         } else if (action === 'copy-quote-summary') {
-          copyText(document.getElementById('receiptPreText').textContent, 'Order summary copied!');
+          if ($('receiptPreText')) copyText($('receiptPreText').textContent, 'Order summary copied!');
         } else if (action === 'set-open') {
           config.isOpen = true;
           populateSellerView();
@@ -2095,22 +2111,22 @@
           populateSellerView();
           saveSettings(true);
         } else if (action === 'copy-cust-link') {
-          copyText(document.getElementById('shortCustomerLinkInput').value, 'Short customer link copied!');
+          if ($('shortCustomerLinkInput')) copyText($('shortCustomerLinkInput').value, 'Ultra-short customer link copied!');
         } else if (action === 'copy-clean-link') {
-          copyText(document.getElementById('cleanDirectLinkInput').value, 'Clean direct link copied!');
+          if ($('cleanDirectLinkInput')) copyText($('cleanDirectLinkInput').value, 'Clean direct link copied!');
         } else if (action === 'share-cust-wa') {
-          const link = document.getElementById('shortCustomerLinkInput').value;
-          const msg = (config.isOpen
+          var link = $('shortCustomerLinkInput') ? $('shortCustomerLinkInput').value : '';
+          var msg = (config.isOpen
             ? 'Order *' + config.storeName + '* now for *12:00 PM Collection at Library UMS* (Max 5 pax per meal):\n'
             : '*' + config.storeName + '* orders are currently CLOSED:\n') + link;
           window.open('https://wa.me/?text=' + encodeURIComponent(msg), '_blank');
         } else if (action === 'copy-admin-link') {
-          copyText(document.getElementById('sellerAdminLinkInput').value, 'Seller admin link copied!');
+          if ($('sellerAdminLinkInput')) copyText($('sellerAdminLinkInput').value, 'Seller admin link copied!');
         } else if (action === 'clear-qr') {
           config.qrData = '';
           config.qrUrl = '';
-          document.getElementById('sellerQrUrl').value = '';
-          document.getElementById('qrFileInput').value = '';
+          if ($('sellerQrUrl')) $('sellerQrUrl').value = '';
+          if ($('qrFileInput')) $('qrFileInput').value = '';
           populateSellerView();
           saveSettings(true);
           showToast('QR removed');
@@ -2142,15 +2158,15 @@
           renderSellerMenuBuilder();
           saveSettings(true);
         } else if (action === 'meal-up' && idx > 0) {
-          const tmp = config.menus[idx - 1];
+          var tmpUp = config.menus[idx - 1];
           config.menus[idx - 1] = config.menus[idx];
-          config.menus[idx] = tmp;
+          config.menus[idx] = tmpUp;
           renderSellerMenuBuilder();
           saveSettings(true);
         } else if (action === 'meal-down' && idx >= 0 && idx < config.menus.length - 1) {
-          const tmp = config.menus[idx + 1];
+          var tmpDn = config.menus[idx + 1];
           config.menus[idx + 1] = config.menus[idx];
-          config.menus[idx] = tmp;
+          config.menus[idx] = tmpDn;
           renderSellerMenuBuilder();
           saveSettings(true);
         } else if (action === 'meal-del' && config.menus.length > 1 && config.menus[idx]) {
@@ -2165,37 +2181,37 @@
           saveSettings(true);
           showToast('Photo removed');
         } else if (action === 'verify-issue-receipt') {
-          const list = getOrderLog();
-          if (list[idx]) {
-            list[idx].status = 'Verified Paid';
-            list[idx].verifiedAt = getNowStamp();
-            saveOrderLog(list);
+          var listVer = getOrderLog();
+          if (listVer[idx]) {
+            listVer[idx].status = 'Verified Paid';
+            listVer[idx].verifiedAt = getNowStamp();
+            saveOrderLog(listVer);
             renderSalesDashboard();
-            openIssuedModalForOrder(list[idx]);
+            openIssuedModalForOrder(listVer[idx]);
           }
         } else if (action === 'reopen-issued-receipt') {
-          const list = getOrderLog();
-          if (list[idx]) openIssuedModalForOrder(list[idx]);
+          var listRe = getOrderLog();
+          if (listRe[idx]) openIssuedModalForOrder(listRe[idx]);
         } else if (action === 'cycle-status') {
-          const list = getOrderLog();
-          if (list[idx]) {
-            const states = ['Payment Submitted', 'Verified Paid', 'Collected', 'Cancelled'];
-            const next = states[(states.indexOf(list[idx].status) + 1) % states.length];
-            list[idx].status = next;
-            if (next === 'Verified Paid' && !list[idx].verifiedAt) list[idx].verifiedAt = getNowStamp();
-            saveOrderLog(list);
+          var listCy = getOrderLog();
+          if (listCy[idx]) {
+            var states = ['Payment Submitted', 'Verified Paid', 'Collected', 'Cancelled'];
+            var next = states[(states.indexOf(listCy[idx].status) + 1) % states.length];
+            listCy[idx].status = next;
+            if (next === 'Verified Paid' && !listCy[idx].verifiedAt) listCy[idx].verifiedAt = getNowStamp();
+            saveOrderLog(listCy);
             renderSalesDashboard();
           }
         } else if (action === 'copy-issued-link') {
-          copyText(document.getElementById('issuedReceiptLinkInput').value, 'Official Receipt link copied!');
+          if ($('issuedReceiptLinkInput')) copyText($('issuedReceiptLinkInput').value, 'Official Receipt link copied!');
         } else if (action === 'send-issued-wa') {
           if (!activeIssuedOrder) return;
-          const text = document.getElementById('issuedReceiptPreText').textContent;
-          const phone = cleanPhone(activeIssuedOrder.phone);
-          const url = phone
-            ? 'https://wa.me/' + phone + '?text=' + encodeURIComponent(text)
-            : 'https://wa.me/?text=' + encodeURIComponent(text);
-          window.open(url, '_blank');
+          var textWa = $('issuedReceiptPreText') ? $('issuedReceiptPreText').textContent : '';
+          var phoneWa = cleanPhone(activeIssuedOrder.phone);
+          var urlWa = phoneWa
+            ? 'https://wa.me/' + phoneWa + '?text=' + encodeURIComponent(textWa)
+            : 'https://wa.me/?text=' + encodeURIComponent(textWa);
+          window.open(urlWa, '_blank');
         } else if (action === 'preview-issued-card') {
           if (!activeIssuedOrder) return;
           document.querySelectorAll('.modal-backdrop').forEach(function (m) { m.classList.remove('open'); });
@@ -2211,7 +2227,7 @@
           });
         } else if (action === 'copy-official-receipt-text') {
           if (!activeReceiptData) return;
-          const fakeOrder = {
+          var fakeOrder = {
             refId: activeReceiptData.id,
             name: activeReceiptData.n,
             phone: activeReceiptData.p,
@@ -2225,110 +2241,112 @@
           try { window.print(); } catch (err) { showToast('Use browser Share → Print / Save PDF'); }
         } else if (action === 'back-to-order') {
           try { window.history.replaceState(null, '', window.location.pathname); } catch (err) {}
-          document.getElementById('topNavTabs').style.display = isCustomerLinkMode ? 'none' : 'flex';
+          if ($('topNavTabs')) $('topNavTabs').style.display = isCustomerLinkMode ? 'none' : 'flex';
           switchTab('customer');
         } else if (action === 'open-import-modal') {
-          document.getElementById('importWaText').value = '';
-          document.getElementById('importModal').classList.add('open');
+          if ($('importWaText')) $('importWaText').value = '';
+          if ($('importModal')) $('importModal').classList.add('open');
         } else if (action === 'run-import-wa') {
-          const raw = (document.getElementById('importWaText').value || '').trim();
+          var raw = ($('importWaText') ? $('importWaText').value : '').trim();
           if (!raw) return showToast('Paste a WhatsApp message first');
-          const nameMatch = raw.match(/Name:\s*(.+)/i);
-          const phoneMatch = raw.match(/Phone:\s*(.+)/i);
-          const refMatch = raw.match(/Order Ref:\s*\*?([A-Z0-9-]+)\*?/i);
-          const items = [];
-          let pax = 0;
-          let foodSub = 0;
+          var nameMatch = raw.match(/Name:\s*(.+)/i);
+          var phoneMatch = raw.match(/Phone:\s*(.+)/i);
+          var refMatch = raw.match(/Order Ref:\s*\*?([A-Z0-9-]+)\*?/i);
+          var itemsImp = [];
+          var paxImp = 0;
+          var foodSubImp = 0;
 
           config.menus.forEach(function (m) {
-            const escapedName = m.name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-            const rx = new RegExp('(\\d+)\\s*[x×]\\s*' + escapedName, 'i');
-            const match = raw.match(rx);
+            var escapedName = m.name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+            var rx = new RegExp('(\\d+)\\s*[x×]\\s*' + escapedName, 'i');
+            var match = raw.match(rx);
             if (match) {
-              const q = parseInt(match[1], 10) || 0;
+              var q = parseInt(match[1], 10) || 0;
               if (q > 0) {
-                items.push({ id: m.id, name: m.name, qty: q, price: m.price, lineTotal: q * m.price });
-                pax += q;
-                foodSub += q * m.price;
+                itemsImp.push({ id: m.id, name: m.name, qty: q, price: m.price, lineTotal: q * m.price });
+                paxImp += q;
+                foodSubImp += q * m.price;
               }
             }
           });
 
-          if (items.length === 0) return showToast('Could not detect meal quantities (e.g. 2x Basic)');
-          const fee = Number(config.fee || 5);
-          const list = getOrderLog();
-          list.unshift({
+          if (itemsImp.length === 0) return showToast('Could not detect meal quantities (e.g. 2x Basic)');
+          var feeImp = Number(config.fee || 5);
+          var listImp = getOrderLog();
+          listImp.unshift({
             refId: refMatch ? refMatch[1] : genOrderRef(),
             time: getNowStamp(),
             name: nameMatch ? nameMatch[1].trim() : 'WhatsApp Customer',
             phone: phoneMatch ? phoneMatch[1].trim() : '-',
-            items: items,
-            pax: pax,
-            foodSubtotal: foodSub,
-            fee: fee,
-            total: foodSub + fee,
+            items: itemsImp,
+            pax: paxImp,
+            foodSubtotal: foodSubImp,
+            fee: feeImp,
+            total: foodSubImp + feeImp,
             status: 'Payment Submitted',
             verifiedAt: ''
           });
-          saveOrderLog(list);
-          document.getElementById('importModal').classList.remove('open');
+          saveOrderLog(listImp);
+          if ($('importModal')) $('importModal').classList.remove('open');
           renderSalesDashboard();
-          showToast('Imported ' + pax + ' meals into sales log!');
+          showToast('Imported ' + paxImp + ' meals into sales log!');
         } else if (action === 'open-manual-modal') {
-          document.getElementById('manName').value = '';
-          document.getElementById('manPhone').value = '';
-          document.getElementById('manualMealInputs').innerHTML = config.menus.map(function (m, i) {
-            return (
-              '<div style="display:flex; justify-content:space-between; align-items:center; padding:6px 0; border-bottom:1px solid var(--border);">' +
-                '<span style="font-size:13.5px; font-weight:700;">' + esc(m.name) + ' (' + formatRM(m.price) + ')</span>' +
-                '<input type="number" min="0" max="5" value="0" data-man-idx="' + i + '" style="width:64px; padding:6px; border:1.5px solid var(--border); border-radius:8px; text-align:center; font-weight:800;" />' +
-              '</div>'
-            );
-          }).join('');
-          document.getElementById('manualModal').classList.add('open');
+          if ($('manName')) $('manName').value = '';
+          if ($('manPhone')) $('manPhone').value = '';
+          if ($('manualMealInputs')) {
+            $('manualMealInputs').innerHTML = config.menus.map(function (m, i) {
+              return (
+                '<div style="display:flex; justify-content:space-between; align-items:center; padding:6px 0; border-bottom:1px solid var(--border);">' +
+                  '<span style="font-size:13.5px; font-weight:700;">' + esc(m.name) + ' (' + formatRM(m.price) + ')</span>' +
+                  '<input type="number" min="0" max="5" value="0" data-man-idx="' + i + '" style="width:64px; padding:6px; border:1.5px solid var(--border); border-radius:8px; text-align:center; font-weight:800;" />' +
+                '</div>'
+              );
+            }).join('');
+          }
+          if ($('manualModal')) $('manualModal').classList.add('open');
         } else if (action === 'save-manual-order') {
-          const name = (document.getElementById('manName').value || '').trim();
-          if (!name) return showToast('Enter customer name');
-          const phone = (document.getElementById('manPhone').value || '').trim() || '-';
-          const items = [];
-          let pax = 0;
-          let foodSub = 0;
+          var nameMan = ($('manName') ? $('manName').value : '').trim();
+          if (!nameMan) return showToast('Enter customer name');
+          var phoneMan = ($('manPhone') ? $('manPhone').value : '').trim() || '-';
+          var itemsMan = [];
+          var paxMan = 0;
+          var foodSubMan = 0;
           document.querySelectorAll('[data-man-idx]').forEach(function (inp) {
-            const mIdx = parseInt(inp.getAttribute('data-man-idx'), 10);
-            const q = parseInt(inp.value || '0', 10) || 0;
-            const m = config.menus[mIdx];
+            var mIdx = parseInt(inp.getAttribute('data-man-idx'), 10);
+            var q = parseInt(inp.value || '0', 10) || 0;
+            var m = config.menus[mIdx];
             if (m && q > 0) {
-              items.push({ id: m.id, name: m.name, qty: q, price: m.price, lineTotal: q * m.price });
-              pax += q;
-              foodSub += q * m.price;
+              itemsMan.push({ id: m.id, name: m.name, qty: q, price: m.price, lineTotal: q * m.price });
+              paxMan += q;
+              foodSubMan += q * m.price;
             }
           });
-          if (items.length === 0) return showToast('Enter at least 1 meal quantity');
-          const fee = Number(config.fee || 5);
-          const list = getOrderLog();
-          list.unshift({
+          if (itemsMan.length === 0) return showToast('Enter at least 1 meal quantity');
+          var feeMan = Number(config.fee || 5);
+          var listMan = getOrderLog();
+          listMan.unshift({
             refId: genOrderRef(),
             time: getNowStamp(),
-            name: name,
-            phone: phone,
-            items: items,
-            pax: pax,
-            foodSubtotal: foodSub,
-            fee: fee,
-            total: foodSub + fee,
+            name: nameMan,
+            phone: phoneMan,
+            items: itemsMan,
+            pax: paxMan,
+            foodSubtotal: foodSubMan,
+            fee: feeMan,
+            total: foodSubMan + feeMan,
             status: 'Verified Paid',
             verifiedAt: getNowStamp()
           });
-          saveOrderLog(list);
-          document.getElementById('manualModal').classList.remove('open');
+          saveOrderLog(listMan);
+          if ($('manualModal')) $('manualModal').classList.remove('open');
           renderSalesDashboard();
           showToast('Order logged!');
         } else if (action === 'copy-sales-report') {
-          const orders = document.getElementById('statOrders').textContent;
-          const verified = document.getElementById('statVerified').textContent;
-          const pax = document.getElementById('statPax').textContent;
-          const rev = document.getElementById('statRevenue').textContent;
-          const report = [
+          var orders = $('statOrders') ? $('statOrders').textContent : '0';
+          var verified = $('statVerified') ? $('statVerified').textContent : '0';
+          var pax = $('statPax') ? $('statPax').textContent : '0';
+          var rev = $('statRevenue') ? $('statRevenue').textContent : 'RM 0.00';
+          var report = [
             '*' + (config.storeName || 'NFA meals') + ' — Daily Sales Report*',
             'Active Orders: ' + orders + ' (Verified Paid: ' + verified + ')',
             'Total Meals Sold: ' + pax + ' pax',
@@ -2345,37 +2363,39 @@
         }
       });
 
-      // Input delegation for Seller Settings & Menu Builder
       document.addEventListener('input', function (e) {
-        const target = e.target;
-        if (target.matches('#sellerStoreName, #sellerWhatsapp, #sellerIntroText, #sellerFee, #sellerClosedMsg, #sellerQrUrl')) {
+        var target = e.target;
+        if (!target) return;
+        if (target.matches && target.matches('#sellerStoreName, #sellerWhatsapp, #sellerIntroText, #sellerFee, #sellerClosedMsg, #sellerQrUrl')) {
           saveSettings(false);
           if (target.id === 'sellerQrUrl') {
-            const src = config.qrData || config.qrUrl || '';
-            const wrap = document.getElementById('sellerQrPreviewWrap');
-            const prev = document.getElementById('sellerQrPreview');
-            if (src) { prev.src = src; wrap.style.display = 'block'; }
-            else { wrap.style.display = 'none'; }
+            var src = config.qrData || config.qrUrl || '';
+            var wrap = $('sellerQrPreviewWrap');
+            var prev = $('sellerQrPreview');
+            if (wrap && prev) {
+              if (src) { prev.src = src; wrap.style.display = 'block'; }
+              else { wrap.style.display = 'none'; }
+            }
           }
-        } else if (target.hasAttribute('data-meal-field')) {
-          const field = target.getAttribute('data-meal-field');
-          const idx = parseInt(target.getAttribute('data-idx'), 10);
-          const m = config.menus[idx];
+        } else if (target.hasAttribute && target.hasAttribute('data-meal-field')) {
+          var field = target.getAttribute('data-meal-field');
+          var idx = parseInt(target.getAttribute('data-idx'), 10);
+          var m = config.menus[idx];
           if (!m) return;
           if (field === 'name') m.name = target.value;
           else if (field === 'desc') m.desc = target.value;
           else if (field === 'photoUrl') m.photoUrl = target.value.trim();
           else if (field === 'price') {
-            const num = parseFloat(target.value);
+            var num = parseFloat(target.value);
             if (!isNaN(num) && num >= 0) m.price = num;
           }
           saveSettings(false);
         }
       });
 
-      // File upload delegation (QR & Meal Photos)
       document.addEventListener('change', function (e) {
-        const target = e.target;
+        var target = e.target;
+        if (!target) return;
         if (target.id === 'qrFileInput' && target.files && target.files[0]) {
           compressImageFile(target.files[0], function (dataUrl) {
             config.qrData = dataUrl;
@@ -2383,8 +2403,8 @@
             saveSettings(true);
             showToast('QR code uploaded!');
           });
-        } else if (target.hasAttribute('data-meal-photo') && target.files && target.files[0]) {
-          const idx = parseInt(target.getAttribute('data-meal-photo'), 10);
+        } else if (target.hasAttribute && target.hasAttribute('data-meal-photo') && target.files && target.files[0]) {
+          var idx = parseInt(target.getAttribute('data-meal-photo'), 10);
           compressImageFile(target.files[0], function (dataUrl) {
             if (config.menus[idx]) {
               config.menus[idx].photoData = dataUrl;
@@ -2396,9 +2416,8 @@
         }
       });
 
-      // Live cross-tab sync for Total Sales Log
       window.addEventListener('storage', function (e) {
-        if (e.key === LOG_KEY && document.getElementById('sellerView').style.display !== 'none') {
+        if (e.key === LOG_KEY && $('sellerView') && $('sellerView').style.display !== 'none') {
           renderSalesDashboard();
         }
       });
@@ -2406,18 +2425,22 @@
       // Safe Boot
       try {
         loadState();
-        const hash = window.location.hash || '';
+        var hash = window.location.hash || '';
         if (hash.startsWith('#r=')) {
-          const rawRec = hash.slice(3);
-          const recStr = fromBase64Url(rawRec);
-          const recData = recStr ? JSON.parse(recStr) : decodeSafePayload(rawRec);
+          var rawRec = hash.slice(3);
+          var recStr = fromBase64Url(rawRec);
+          var recData = null;
+          if (recStr) {
+            try { recData = JSON.parse(recStr); } catch (e) { recData = null; }
+          }
+          if (!recData) recData = decodeSafePayload(rawRec);
           if (recData) {
             renderOfficialReceiptPage(recData);
             return;
           }
         }
-        if (isCustomerLinkMode) {
-          document.getElementById('topNavTabs').style.display = 'none';
+        if (isCustomerLinkMode && $('topNavTabs')) {
+          $('topNavTabs').style.display = 'none';
         }
         if (hash === '#setup') {
           switchTab('seller');
@@ -2425,9 +2448,10 @@
           renderCustomerView();
         }
       } catch (err) {
-        renderCustomerView();
+        try { renderCustomerView(); } catch (e2) {}
       }
     })();
   </script>
 </body>
 </html>
+```
