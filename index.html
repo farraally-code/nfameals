@@ -1,3 +1,4 @@
+Tap the Copy icon at the top-right corner of the code block below, then paste it into index.html on your GitHub repository (farraally-code/nfameals):
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -116,15 +117,2181 @@
 
     .container { max-width: 1040px; margin: 0 auto; padding: 18px 16px 48px; }
 
-    /* Intro Card */
+    /* Intro Banner */
     .intro-card {
       background: linear-gradient(135deg, #fff7ed 0%, #ffffff 100%);
       border: 1.5px solid var(--primary-border);
       border-radius: var(--radius);
-      padding: 16px 18px;
+      padding: 15px 18px;
       margin-bottom: 16px;
       box-shadow: var(--shadow);
     }
-    .intro-badge {
+    .intro-eyebrow {
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--primary);
+      margin-bottom: 4px;
+    }
+    .intro-body {
+      font-size: 14px;
+      color: #1e293b;
+      font-weight: 600;
+      line-height: 1.55;
+      white-space: pre-line;
+    }
+
+    .closed-banner {
+      display: none;
+      background: var(--red-soft);
+      border: 2px solid var(--red-border);
+      color: #991b1b;
+      border-radius: 16px;
+      padding: 16px 18px;
+      margin-bottom: 16px;
+    }
+    .closed-banner.show { display: block; }
+    .closed-banner-head { font-size: 16px; font-weight: 800; margin-bottom: 4px; }
+    .closed-banner p { font-size: 13.5px; font-weight: 600; color: #7f1d1d; }
+
+    /* Pending Order Banner */
+    .pending-banner {
+      display: none;
+      background: var(--amber-soft);
+      border: 2px solid var(--amber-border);
+      border-radius: 16px;
+      padding: 15px 18px;
+      margin-bottom: 16px;
+      color: var(--amber-text);
+    }
+    .pending-banner.show { display: block; }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 18px;
+      box-shadow: var(--shadow);
+      margin-bottom: 16px;
+    }
+
+    .step-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+    .step-title-wrap { display: flex; align-items: center; gap: 10px; }
+    .step-badge {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: var(--primary-soft);
+      color: var(--primary);
+      border: 1px solid var(--primary-border);
+      font-weight: 800;
+      font-size: 13px;
       display: inline-flex;
       align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .step-title { font-size: 16.5px; font-weight: 800; color: var(--text); }
+    .cap-pill {
+      background: var(--primary-soft);
+      color: var(--primary);
+      border: 1px solid var(--primary-border);
+      font-size: 11.5px;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 999px;
+    }
+
+    /* 3-Column Open Menu Grid */
+    .menu-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+    }
+    @media (max-width: 780px) {
+      .menu-grid { grid-template-columns: 1fr; }
+    }
+
+    .menu-card {
+      border: 1.5px solid var(--border);
+      border-radius: 14px;
+      padding: 14px;
+      background: #ffffff;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .menu-card.selected {
+      border-color: var(--primary);
+      background: #fffaf5;
+    }
+    .menu-card.sold-out {
+      opacity: 0.58;
+      background: #f8fafc;
+    }
+    .menu-photo-wrap {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16 / 10;
+      border-radius: 10px;
+      overflow: hidden;
+      margin-bottom: 10px;
+      border: 1px solid var(--border);
+      background: #f1f5f9;
+      cursor: pointer;
+    }
+    .menu-photo-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .photo-zoom-tag {
+      position: absolute;
+      bottom: 6px;
+      right: 6px;
+      background: rgba(15, 23, 42, 0.72);
+      color: #fff;
+      font-size: 10.5px;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 999px;
+    }
+    .menu-card-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 6px;
+    }
+    .menu-name { font-weight: 800; font-size: 15.5px; color: var(--text); }
+    .menu-price { font-weight: 800; font-size: 15px; color: var(--primary); white-space: nowrap; }
+    .menu-price small { font-size: 11px; font-weight: 600; color: var(--muted); }
+    .menu-desc { font-size: 13px; color: var(--muted); margin-bottom: 12px; min-height: 36px; }
+
+    .menu-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-top: 10px;
+      border-top: 1px dashed var(--border);
+      gap: 8px;
+    }
+    .max-hint { font-size: 11.5px; font-weight: 700; color: var(--muted); }
+    .sold-badge {
+      font-size: 11.5px;
+      font-weight: 800;
+      color: var(--red);
+      background: var(--red-soft);
+      border: 1px solid var(--red-border);
+      padding: 3px 9px;
+      border-radius: 999px;
+    }
+
+    .stepper {
+      display: inline-flex;
+      align-items: center;
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      background: #fff;
+      overflow: hidden;
+    }
+    .step-btn {
+      width: 34px;
+      height: 32px;
+      border: none;
+      background: #f8fafc;
+      color: var(--text);
+      font-size: 17px;
+      font-weight: 800;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .step-btn:disabled { opacity: 0.35; cursor: not-allowed; }
+    .step-qty {
+      min-width: 34px;
+      text-align: center;
+      font-weight: 800;
+      font-size: 14.5px;
+      color: var(--text);
+    }
+
+    .two-col {
+      display: grid;
+      grid-template-columns: 1.05fr 0.95fr;
+      gap: 16px;
+      align-items: start;
+    }
+    @media (max-width: 780px) {
+      .two-col { grid-template-columns: 1fr; }
+    }
+
+    .pickup-banner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+      background: var(--amber-soft);
+      border: 1px solid var(--amber-border);
+      color: var(--amber-text);
+      padding: 11px 13px;
+      border-radius: 12px;
+      margin-bottom: 14px;
+      font-size: 13px;
+    }
+
+    .quote-lines { display: flex; flex-direction: column; gap: 8px; margin-bottom: 12px; }
+    .quote-line {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 13.5px;
+      color: var(--text);
+    }
+    .quote-line span:last-child { font-weight: 700; }
+    .quote-divider { height: 1px; background: var(--border); margin: 10px 0; }
+    .quote-total-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #0f172a;
+      color: #ffffff;
+      padding: 13px 15px;
+      border-radius: 12px;
+      margin-top: 10px;
+    }
+    .quote-total-label { font-size: 13.5px; font-weight: 700; color: #cbd5e1; }
+    .quote-total-val { font-size: 21px; font-weight: 900; color: #ffffff; }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 14px;
+    }
+    @media (max-width: 520px) {
+      .form-grid { grid-template-columns: 1fr; }
+    }
+    .field { display: flex; flex-direction: column; gap: 4px; }
+    .field.full { grid-column: 1 / -1; }
+    .field label { font-size: 12px; font-weight: 700; color: #334155; }
+    .field input, .field textarea {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      font-size: 14px;
+      font-family: inherit;
+      color: var(--text);
+      background: #fff;
+      outline: none;
+    }
+    .field input:focus, .field textarea:focus { border-color: var(--primary); }
+    .field input[readonly] { background: #f8fafc; color: #475569; font-weight: 700; }
+
+    .qr-box {
+      border: 1.5px dashed var(--border);
+      border-radius: 14px;
+      padding: 16px;
+      text-align: center;
+      background: #f8fafc;
+      margin-bottom: 14px;
+    }
+    .qr-box img {
+      max-width: 210px;
+      max-height: 210px;
+      width: 100%;
+      height: auto;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      background: #fff;
+      padding: 6px;
+      margin: 0 auto 10px;
+      display: block;
+    }
+    .qr-placeholder {
+      padding: 20px 12px;
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .btn {
+      width: 100%;
+      border: none;
+      border-radius: 12px;
+      padding: 12px 16px;
+      font-size: 14.5px;
+      font-weight: 800;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    .btn:disabled { opacity: 0.45; cursor: not-allowed; }
+    .btn-green { background: var(--green); color: #fff; }
+    .btn-primary { background: var(--primary); color: #fff; }
+    .btn-blue { background: var(--blue); color: #fff; }
+    .btn-outline {
+      background: #fff;
+      color: var(--text);
+      border: 1.5px solid var(--border);
+      margin-top: 8px;
+    }
+    .btn-sm { padding: 7px 11px; font-size: 12.5px; border-radius: 10px; width: auto; }
+
+    /* Seller Admin Controls */
+    .status-switch-card {
+      border: 2px solid var(--green-border);
+      background: var(--green-soft);
+      border-radius: 14px;
+      padding: 14px 16px;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .status-switch-card.is-closed {
+      border-color: var(--red-border);
+      background: var(--red-soft);
+    }
+    .toggle-pill-group {
+      display: inline-flex;
+      background: #fff;
+      padding: 4px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      gap: 4px;
+    }
+    .toggle-opt {
+      border: none;
+      padding: 8px 14px;
+      border-radius: 9px;
+      font-weight: 800;
+      font-size: 13px;
+      cursor: pointer;
+      background: transparent;
+      color: var(--muted);
+    }
+    .toggle-opt.active-open { background: var(--green); color: #fff; }
+    .toggle-opt.active-closed { background: var(--red); color: #fff; }
+
+    .link-box {
+      background: #f8fafc;
+      border: 1.5px solid var(--border);
+      border-radius: 12px;
+      padding: 12px;
+      margin-bottom: 12px;
+    }
+    .link-box-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 6px;
+      flex-wrap: wrap;
+    }
+    .link-box-title { font-size: 13px; font-weight: 800; color: var(--text); }
+    .char-badge {
+      font-size: 11px;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 999px;
+      background: var(--blue-soft);
+      color: var(--blue);
+      border: 1px solid var(--blue-border);
+    }
+    .link-row { display: flex; gap: 8px; align-items: center; }
+    .link-input {
+      flex: 1;
+      min-width: 0;
+      padding: 8px 10px;
+      border: 1px solid var(--border);
+      border-radius: 9px;
+      font-size: 12.5px;
+      background: #fff;
+      color: #334155;
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    }
+
+    /* Menu Builder Cards in Seller Setup */
+    .seller-meal-box {
+      border: 1.5px solid var(--border);
+      border-radius: 14px;
+      padding: 14px;
+      margin-bottom: 12px;
+      background: #fcfcfd;
+    }
+    .seller-meal-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 10px;
+      padding-bottom: 8px;
+      border-bottom: 1px dashed var(--border);
+    }
+    .file-label {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 8px 12px;
+      border-radius: 10px;
+      background: var(--primary-soft);
+      color: var(--primary);
+      border: 1.5px solid var(--primary-border);
+      font-weight: 800;
+      font-size: 12.5px;
+      cursor: pointer;
+    }
+
+    /* Sales KPI & Meal Breakdown */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+    @media (max-width: 720px) {
+      .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    .stat-tile {
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 10px 8px;
+      text-align: center;
+    }
+    .stat-tile.highlight {
+      background: var(--green-soft);
+      border-color: var(--green-border);
+    }
+    .stat-tile .val { font-size: 16.5px; font-weight: 900; color: var(--text); }
+    .stat-tile.highlight .val { color: #15803d; }
+    .stat-tile .lbl { font-size: 11px; font-weight: 700; color: var(--muted); }
+
+    .breakdown-box {
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 12px;
+      margin-bottom: 14px;
+    }
+    .breakdown-row { margin-bottom: 8px; }
+    .breakdown-row:last-child { margin-bottom: 0; }
+    .breakdown-meta {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12.5px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+    .bar-track {
+      height: 7px;
+      background: #e2e8f0;
+      border-radius: 999px;
+      overflow: hidden;
+    }
+    .bar-fill {
+      height: 100%;
+      background: var(--primary);
+      border-radius: 999px;
+    }
+
+    .log-item {
+      border: 1.5px solid var(--border);
+      border-radius: 13px;
+      padding: 12px;
+      margin-bottom: 10px;
+      background: #fff;
+    }
+    .log-item.verified {
+      border-color: var(--green-border);
+      background: #fafffc;
+    }
+    .badge-pill {
+      display: inline-block;
+      padding: 3px 9px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 800;
+    }
+    .st-pending { background: var(--amber-soft); color: var(--amber-text); border: 1px solid var(--amber-border); }
+    .st-verified { background: var(--green-soft); color: #15803d; border: 1px solid var(--green-border); }
+    .st-collected { background: var(--blue-soft); color: var(--blue); border: 1px solid var(--blue-border); }
+    .st-cancelled { background: var(--red-soft); color: var(--red); border: 1px solid var(--red-border); }
+
+    /* Official Receipt Card */
+    .official-receipt-card {
+      border: 2px solid #16a34a;
+      border-radius: 18px;
+      background: #ffffff;
+      padding: 22px 20px;
+      max-width: 520px;
+      margin: 0 auto 18px;
+      box-shadow: 0 10px 30px rgba(22, 163, 74, 0.12);
+    }
+    .verified-stamp {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--green-soft);
+      color: #15803d;
+      border: 1.5px solid var(--green-border);
+      padding: 5px 12px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: 0.03em;
+    }
+
+    /* Modals */
+    .modal-backdrop {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.6);
+      z-index: 60;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+    .modal-backdrop.open { display: flex; }
+    .modal-card {
+      background: #fff;
+      border-radius: 18px;
+      max-width: 460px;
+      width: 100%;
+      max-height: 90vh;
+      overflow-y: auto;
+      padding: 20px;
+      box-shadow: 0 20px 40px rgba(15, 23, 42, 0.25);
+    }
+    .receipt-pre {
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 12px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      font-size: 12px;
+      white-space: pre-wrap;
+      margin: 10px 0;
+      color: var(--text);
+    }
+
+    .toast {
+      position: fixed;
+      bottom: 18px;
+      left: 50%;
+      transform: translateX(-50%) translateY(20px);
+      background: #0f172a;
+      color: #fff;
+      padding: 10px 18px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 700;
+      opacity: 0;
+      pointer-events: none;
+      transition: all 0.2s ease;
+      z-index: 80;
+    }
+    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+    .footer-note {
+      text-align: center;
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 20px;
+    }
+    .footer-link {
+      color: var(--muted);
+      text-decoration: underline;
+      background: none;
+      border: none;
+      font-size: 12px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="brand">
+        <div class="brand-icon">NFA</div>
+        <div>
+          <div class="brand-title" id="headerStoreName">NFA meals</div>
+          <div class="brand-sub">
+            <span id="headerStatusPill" class="status-pill open"><span class="status-dot"></span> OPEN</span>
+            <span>Library UMS • 12:00 PM Collection</span>
+          </div>
+        </div>
+      </div>
+
+      <nav class="nav-tabs" id="topNavTabs">
+        <button type="button" class="nav-btn active" id="tabCustomerBtn" data-action="tab-customer">Customer Order</button>
+        <button type="button" class="nav-btn" id="tabSellerBtn" data-action="tab-seller">Seller Setup</button>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+
+    <!-- ==================== OFFICIAL RECEIPT VIEW (#r=...) ==================== -->
+    <section id="officialReceiptView" style="display:none;">
+      <div class="official-receipt-card" id="officialReceiptCardBody"></div>
+      <div style="max-width:520px; margin:0 auto; display:flex; gap:10px; flex-wrap:wrap;">
+        <button type="button" class="btn btn-primary" style="flex:1;" data-action="copy-official-receipt-text">Copy Receipt Text</button>
+        <button type="button" class="btn btn-outline" style="flex:1; margin-top:0;" data-action="print-official-receipt">Save / Print Receipt</button>
+        <button type="button" class="btn btn-outline" data-action="back-to-order">← Back to NFA meals Order Page</button>
+      </div>
+    </section>
+
+    <!-- ==================== CUSTOMER VIEW ==================== -->
+    <section id="customerView">
+
+      <!-- About / Introduction Card -->
+      <div class="intro-card">
+        <div class="intro-eyebrow">What is NFA meals?</div>
+        <div class="intro-body" id="custIntroText">Freshly prepared home-cooked meals made especially for students — warm, hearty, and convenient for you.
+
+12:00 PM pickup at Library UMS.</div>
+      </div>
+
+      <!-- Pending Verification Banner (shown right after customer submits payment) -->
+      <div id="pendingOrderBanner" class="pending-banner">
+        <div style="font-weight:900; font-size:15px; margin-bottom:4px;">⏳ Order Submitted • Awaiting Seller Payment Verification</div>
+        <div style="font-size:13px; line-height:1.5;">
+          Order Reference ID: <strong id="pendingRefCode">NFA-0000</strong><br />
+          Your order is recorded. Once the seller confirms your payment, your <strong>Seller-Verified Official Receipt</strong> will be released to you via WhatsApp.
+        </div>
+      </div>
+
+      <!-- Closed Banner -->
+      <div id="closedBanner" class="closed-banner">
+        <div class="closed-banner-head">⛔ Orders Currently Closed</div>
+        <p id="closedBannerText">Orders for today's 12:00 PM Library UMS collection are closed. Please check back for the next session.</p>
+      </div>
+
+      <!-- Step 1: Open 3-Column Menu -->
+      <div class="card">
+        <div class="step-header">
+          <div class="step-title-wrap">
+            <span class="step-badge">1</span>
+            <h2 class="step-title">Choose Your Meals</h2>
+          </div>
+          <span class="cap-pill">Max 5 per meal</span>
+        </div>
+
+        <div class="menu-grid" id="menuGrid"></div>
+      </div>
+
+      <!-- Steps 2 & 3 -->
+      <div class="two-col">
+
+        <!-- Step 2: Instant Quote & Pickup -->
+        <div class="card">
+          <div class="step-header">
+            <div class="step-title-wrap">
+              <span class="step-badge">2</span>
+              <h2 class="step-title">Instant Quote &amp; Pickup</h2>
+            </div>
+          </div>
+
+          <div class="pickup-banner">
+            <span>📍 Pickup: <strong>Library UMS</strong></span>
+            <span>⏰ Time: <strong>12:00 PM Collection</strong></span>
+          </div>
+
+          <div class="quote-lines" id="quoteLines"></div>
+
+          <div class="quote-divider"></div>
+
+          <div class="quote-line">
+            <span>Food Subtotal (<span id="totalPaxText">1</span> pax)</span>
+            <span id="foodSubtotalText">RM 10.00</span>
+          </div>
+          <div class="quote-line" style="margin-top:6px;">
+            <span>Library UMS Transport Fee</span>
+            <span id="transportFeeText">RM 5.00</span>
+          </div>
+
+          <div class="quote-total-row">
+            <span class="quote-total-label">Total Payable</span>
+            <span class="quote-total-val" id="grandTotalText">RM 15.00</span>
+          </div>
+
+          <div class="form-grid">
+            <div class="field">
+              <label for="custName">Your Name *</label>
+              <input type="text" id="custName" placeholder="e.g. Aina Sofea" />
+            </div>
+            <div class="field">
+              <label for="custPhone">Phone / WhatsApp *</label>
+              <input type="tel" id="custPhone" placeholder="e.g. 011-2345678" />
+            </div>
+            <div class="field full">
+              <label>Collection Point &amp; Time (Fixed)</label>
+              <input type="text" value="Library UMS • 12:00 PM Collection" readonly />
+            </div>
+            <div class="field full">
+              <label for="custNotes">Optional Note</label>
+              <input type="text" id="custNotes" placeholder="e.g. Extra chili / no cutlery" />
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 3: QR Payment & Confirm -->
+        <div class="card">
+          <div class="step-header">
+            <div class="step-title-wrap">
+              <span class="step-badge">3</span>
+              <h2 class="step-title">Scan QR &amp; Confirm Payment</h2>
+            </div>
+          </div>
+
+          <div class="qr-box">
+            <img id="custQrImg" src="" alt="Payment QR Code" style="display:none;" />
+            <div id="custQrPlaceholder" class="qr-placeholder">
+              Seller QR code will appear here once uploaded.<br />
+              You can still submit your order via WhatsApp below.
+            </div>
+            <div style="font-size:12.5px; color:#334155; font-weight:700; margin-top:4px;">
+              Pay exact total: <strong id="qrAmountPrompt" style="color:var(--primary);">RM 15.00</strong>
+            </div>
+            <button type="button" class="btn btn-outline btn-sm" style="margin-top:8px;" data-action="copy-exact-amount">
+              Copy Exact Amount
+            </button>
+          </div>
+
+          <button type="button" class="btn btn-green" id="sendWhatsappBtn" data-action="submit-whatsapp">
+            Send Order &amp; Receipt via WhatsApp
+          </button>
+          <button type="button" class="btn btn-primary" id="confirmPaidBtn" style="margin-top:8px;" data-action="submit-direct">
+            ✓ Confirm Payment Submitted
+          </button>
+          <button type="button" class="btn btn-outline" id="viewReceiptBtn" data-action="open-quote-modal">
+            View / Copy Order Summary
+          </button>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ==================== SELLER SETUP VIEW ==================== -->
+    <section id="sellerView" style="display:none;">
+
+      <!-- Open / Closed Order Toggle -->
+      <div class="status-switch-card" id="sellerStatusCard">
+        <div>
+          <div style="font-weight:800; font-size:15.5px;" id="sellerStatusHeading">🟢 Store Status: OPEN for Orders</div>
+          <div style="font-size:12.5px; color:#334155; margin-top:2px;">
+            Switch to CLOSED anytime to pause incoming orders for 12:00 PM Library UMS collection.
+          </div>
+        </div>
+        <div class="toggle-pill-group">
+          <button type="button" class="toggle-opt active-open" id="btnSetOpen" data-action="set-open">OPEN</button>
+          <button type="button" class="toggle-opt" id="btnSetClosed" data-action="set-closed">CLOSED</button>
+        </div>
+      </div>
+
+      <!-- Shareable Short Links -->
+      <div class="card">
+        <div class="step-header">
+          <div class="step-title-wrap">
+            <span class="step-badge">🔗</span>
+            <h2 class="step-title">Your Permanent Links</h2>
+          </div>
+        </div>
+
+        <div class="link-box">
+          <div class="link-box-head">
+            <span class="link-box-title">1. Short Customer Order Link (Copy &amp; Share)</span>
+            <span class="char-badge" id="shortLinkChars">Short Link</span>
+          </div>
+          <div class="link-row">
+            <input type="text" class="link-input" id="shortCustomerLinkInput" readonly />
+            <button type="button" class="btn btn-primary btn-sm" data-action="copy-cust-link">Copy Link</button>
+            <button type="button" class="btn btn-green btn-sm" data-action="share-cust-wa">WhatsApp</button>
+          </div>
+        </div>
+
+        <div class="link-box" style="margin-bottom:0;">
+          <div class="link-box-head">
+            <span class="link-box-title">2. Seller Admin Link (Bookmark This)</span>
+            <span class="char-badge" style="background:#f1f5f9; color:#475569; border-color:#cbd5e1;">Admin Only</span>
+          </div>
+          <div class="link-row">
+            <input type="text" class="link-input" id="sellerAdminLinkInput" readonly />
+            <button type="button" class="btn btn-outline btn-sm" style="margin-top:0;" data-action="copy-admin-link">Copy Admin URL</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Store & QR Settings -->
+      <div class="card">
+        <div class="step-header">
+          <div class="step-title-wrap">
+            <span class="step-badge">⚙️</span>
+            <h2 class="step-title">Store, Introduction &amp; QR Setup</h2>
+          </div>
+          <span id="savedBadge" style="display:none; font-size:12px; font-weight:800; color:var(--green);">✓ Saved!</span>
+        </div>
+
+        <div class="form-grid">
+          <div class="field">
+            <label for="sellerStoreName">Business Name</label>
+            <input type="text" id="sellerStoreName" value="NFA meals" />
+          </div>
+          <div class="field">
+            <label for="sellerWhatsapp">Your WhatsApp Number (with 60)</label>
+            <input type="tel" id="sellerWhatsapp" placeholder="e.g. 60123456789" />
+          </div>
+          <div class="field full">
+            <label for="sellerIntroText">What is NFA meals? (Customer Introduction)</label>
+            <textarea id="sellerIntroText" rows="3"></textarea>
+          </div>
+          <div class="field">
+            <label>Pickup Location &amp; Time (Locked)</label>
+            <input type="text" value="Library UMS • 12:00 PM Collection" readonly />
+          </div>
+          <div class="field">
+            <label for="sellerFee">Transport / Pickup Fee (RM)</label>
+            <input type="number" step="0.50" min="0" id="sellerFee" value="5.00" />
+          </div>
+          <div class="field full">
+            <label for="sellerClosedMsg">Closed Notice Message (shown when CLOSED)</label>
+            <input type="text" id="sellerClosedMsg" />
+          </div>
+        </div>
+
+        <div style="margin-top:16px; padding-top:14px; border-top:1px solid var(--border);">
+          <div style="font-size:13px; font-weight:800; margin-bottom:8px;">Payment QR Code (DuitNow / Bank QR)</div>
+          <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+            <label for="qrFileInput" class="file-label">📷 Upload QR from Phone</label>
+            <input type="file" id="qrFileInput" accept="image/*" style="display:none;" />
+            <button type="button" class="btn btn-outline btn-sm" style="margin-top:0;" data-action="clear-qr">Remove QR</button>
+          </div>
+          <div class="field" style="margin-top:10px;">
+            <label for="sellerQrUrl">Or Paste Direct QR Image URL</label>
+            <input type="url" id="sellerQrUrl" placeholder="https://..." />
+          </div>
+          <div id="sellerQrPreviewWrap" style="margin-top:10px; display:none;">
+            <img id="sellerQrPreview" src="" alt="Seller QR Preview" style="max-width:130px; border-radius:10px; border:1px solid var(--border); padding:4px; background:#fff;" />
+          </div>
+        </div>
+
+        <div style="margin-top:14px;">
+          <button type="button" class="btn btn-primary" data-action="save-settings">Save All Settings</button>
+        </div>
+      </div>
+
+      <!-- Flexible Menu Builder -->
+      <div class="card">
+        <div class="step-header">
+          <div class="step-title-wrap">
+            <span class="step-badge">🍱</span>
+            <h2 class="step-title">Menu Builder (Max 5 Pax Each)</h2>
+          </div>
+          <div style="display:flex; gap:6px;">
+            <button type="button" class="btn btn-primary btn-sm" data-action="add-meal">+ Add New Meal</button>
+            <button type="button" class="btn btn-outline btn-sm" style="margin-top:0;" data-action="reset-meals">Reset Default 3</button>
+          </div>
+        </div>
+
+        <div id="sellerMenuEditor"></div>
+      </div>
+
+      <!-- Automatic Total Sales & Meal Breakdown Log -->
+      <div class="card">
+        <div class="step-header">
+          <div class="step-title-wrap">
+            <span class="step-badge">📊</span>
+            <h2 class="step-title">Total Sales &amp; Meal Breakdown Log</h2>
+          </div>
+          <div style="display:flex; gap:6px; flex-wrap:wrap;">
+            <button type="button" class="btn btn-outline btn-sm" style="margin-top:0;" data-action="open-import-modal">📥 Import WhatsApp</button>
+            <button type="button" class="btn btn-outline btn-sm" style="margin-top:0;" data-action="open-manual-modal">+ Log Order</button>
+            <button type="button" class="btn btn-outline btn-sm" style="margin-top:0;" data-action="copy-sales-report">Copy Report</button>
+            <button type="button" class="btn btn-outline btn-sm" style="margin-top:0; color:var(--red);" data-action="clear-log">Clear</button>
+          </div>
+        </div>
+
+        <div class="kpi-grid">
+          <div class="stat-tile">
+            <div class="val" id="statOrders">0</div>
+            <div class="lbl">Active Orders</div>
+          </div>
+          <div class="stat-tile">
+            <div class="val" id="statVerified">0</div>
+            <div class="lbl">Verified Paid</div>
+          </div>
+          <div class="stat-tile">
+            <div class="val" id="statPax">0</div>
+            <div class="lbl">Meals Bought</div>
+          </div>
+          <div class="stat-tile">
+            <div class="val" id="statFoodSales">RM 0.00</div>
+            <div class="lbl">Food Sales</div>
+          </div>
+          <div class="stat-tile highlight">
+            <div class="val" id="statRevenue">RM 0.00</div>
+            <div class="lbl">Total Sales</div>
+          </div>
+        </div>
+
+        <div class="breakdown-box" id="mealBreakdownBox"></div>
+
+        <div id="orderLogList"></div>
+      </div>
+
+    </section>
+
+    <div class="footer-note">
+      NFA meals • Library UMS 12:00 PM Collection &nbsp;•&nbsp;
+      <button type="button" class="footer-link" data-action="tab-seller">Seller Admin</button>
+    </div>
+  </main>
+
+  <!-- Photo Zoom Modal -->
+  <div class="modal-backdrop" id="photoModal">
+    <div class="modal-card" style="text-align:center;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+        <h3 id="photoModalTitle" style="font-size:16px; font-weight:800;">Meal Photo</h3>
+        <button type="button" data-action="close-modals" style="border:none; background:none; font-size:22px; cursor:pointer;">×</button>
+      </div>
+      <img id="photoModalImg" src="" alt="Food Preview" style="width:100%; max-height:60vh; object-fit:contain; border-radius:12px;" />
+      <p id="photoModalDesc" style="font-size:13px; color:var(--muted); margin-top:8px;"></p>
+    </div>
+  </div>
+
+  <!-- Quote Summary Modal -->
+  <div class="modal-backdrop" id="receiptModal">
+    <div class="modal-card">
+      <div style="display:flex; justify-content:space-between; align-items:center;">
+        <h3 style="font-size:16px; font-weight:800;">Order &amp; Quote Summary</h3>
+        <button type="button" data-action="close-modals" style="border:none; background:none; font-size:22px; cursor:pointer;">×</button>
+      </div>
+      <pre class="receipt-pre" id="receiptPreText"></pre>
+      <button type="button" class="btn btn-primary" data-action="copy-quote-summary">Copy Summary Text</button>
+      <button type="button" class="btn btn-outline" data-action="close-modals">Close</button>
+    </div>
+  </div>
+
+  <!-- Seller Official Receipt Issued Modal -->
+  <div class="modal-backdrop" id="issuedReceiptModal">
+    <div class="modal-card">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+        <h3 style="font-size:16px; font-weight:800; color:#15803d;">✅ Official Receipt Released</h3>
+        <button type="button" data-action="close-modals" style="border:none; background:none; font-size:22px; cursor:pointer;">×</button>
+      </div>
+      <p style="font-size:13px; color:#334155; margin-bottom:8px;">
+        Payment verified! Send this Official Receipt link directly to your customer on WhatsApp:
+      </p>
+      <div class="link-row" style="margin-bottom:8px;">
+        <input type="text" class="link-input" id="issuedReceiptLinkInput" readonly />
+        <button type="button" class="btn btn-outline btn-sm" style="margin-top:0;" data-action="copy-issued-link">Copy Link</button>
+      </div>
+      <pre class="receipt-pre" id="issuedReceiptPreText"></pre>
+      <button type="button" class="btn btn-green" data-action="send-issued-wa">📲 Send Official Receipt via WhatsApp</button>
+      <button type="button" class="btn btn-blue" style="margin-top:8px;" data-action="preview-issued-card">👁️ Preview Official Receipt Card</button>
+      <button type="button" class="btn btn-outline" data-action="close-modals">Done</button>
+    </div>
+  </div>
+
+  <!-- Import WhatsApp Order Modal -->
+  <div class="modal-backdrop" id="importModal">
+    <div class="modal-card">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+        <h3 style="font-size:16px; font-weight:800;">📥 Import Customer WhatsApp Order</h3>
+        <button type="button" data-action="close-modals" style="border:none; background:none; font-size:22px; cursor:pointer;">×</button>
+      </div>
+      <p style="font-size:12.5px; color:var(--muted); margin-bottom:8px;">
+        Paste the customer's WhatsApp order message below to automatically add their meals to your Total Sales log:
+      </p>
+      <textarea id="importWaText" rows="6" style="width:100%; padding:10px; border:1.5px solid var(--border); border-radius:10px; font-size:13px;" placeholder="Paste WhatsApp order text here..."></textarea>
+      <button type="button" class="btn btn-primary" style="margin-top:10px;" data-action="run-import-wa">Add to Total Sales Log</button>
+      <button type="button" class="btn btn-outline" data-action="close-modals">Cancel</button>
+    </div>
+  </div>
+
+  <!-- Manual Log Order Modal -->
+  <div class="modal-backdrop" id="manualModal">
+    <div class="modal-card">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+        <h3 style="font-size:16px; font-weight:800;">+ Log Order Manually</h3>
+        <button type="button" data-action="close-modals" style="border:none; background:none; font-size:22px; cursor:pointer;">×</button>
+      </div>
+      <div class="field" style="margin-bottom:8px;">
+        <label>Customer Name *</label>
+        <input type="text" id="manName" placeholder="e.g. Daniel" />
+      </div>
+      <div class="field" style="margin-bottom:10px;">
+        <label>Phone / WhatsApp</label>
+        <input type="tel" id="manPhone" placeholder="e.g. 011-2345678" />
+      </div>
+      <div id="manualMealInputs"></div>
+      <button type="button" class="btn btn-primary" style="margin-top:10px;" data-action="save-manual-order">Save Order to Sales Log</button>
+      <button type="button" class="btn btn-outline" data-action="close-modals">Cancel</button>
+    </div>
+  </div>
+
+  <div class="toast" id="toast">Done!</div>
+
+  <script>
+    (function () {
+      const STORAGE_KEY = 'nfa_meals_cfg_v9';
+      const LOG_KEY = 'nfa_meals_log_v9';
+      const MAX_PAX_PER_MEAL = 5;
+
+      const DEFAULT_INTRO = 'Freshly prepared home-cooked meals made especially for students — warm, hearty, and convenient for you.\n\n12:00 PM pickup at Library UMS.';
+      const DEFAULT_CLOSED = "Orders for today's 12:00 PM Library UMS collection are closed. Please check back for the next session.";
+
+      const DEFAULT_CONFIG = {
+        storeName: 'NFA meals',
+        whatsapp: '60123456789',
+        introText: DEFAULT_INTRO,
+        fee: 5.00,
+        isOpen: true,
+        closedMsg: DEFAULT_CLOSED,
+        qrData: '',
+        qrUrl: '',
+        menus: [
+          { id: 'basic', name: 'Basic', price: 10.00, desc: 'Nasi putih, ayam goreng, sayur campur', available: true, photoData: '', photoUrl: '' },
+          { id: 'standard', name: 'Standard', price: 12.50, desc: 'Nasi putih, kari ayam, sayur campur', available: true, photoData: '', photoUrl: '' },
+          { id: 'premium', name: 'Premium', price: 15.00, desc: 'Macaroni pasta chicken', available: true, photoData: '', photoUrl: '' }
+        ]
+      };
+
+      const memStore = {};
+      function safeGet(key) {
+        try { return window.localStorage.getItem(key); } catch (e) { return memStore[key] || null; }
+      }
+      function safeSet(key, val) {
+        try {
+          window.localStorage.setItem(key, val);
+          return true;
+        } catch (e) {
+          memStore[key] = val;
+          return false;
+        }
+      }
+
+      let config = JSON.parse(JSON.stringify(DEFAULT_CONFIG));
+      let quantities = {};
+      let isCustomerLinkMode = false;
+      let activeIssuedOrder = null;
+      let activeReceiptData = null;
+
+      function esc(str) {
+        return String(str == null ? '' : str)
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;');
+      }
+
+      function showToast(msg) {
+        const el = document.getElementById('toast');
+        if (!el) return;
+        el.textContent = msg;
+        el.classList.add('show');
+        clearTimeout(window._nfaToast);
+        window._nfaToast = setTimeout(function () { el.classList.remove('show'); }, 2200);
+      }
+
+      function formatRM(num) {
+        return 'RM ' + (Number(num) || 0).toFixed(2);
+      }
+
+      function cleanPhone(raw) {
+        let digits = String(raw || '').replace(/\D/g, '');
+        if (digits.startsWith('0')) digits = '6' + digits;
+        return digits;
+      }
+
+      function genOrderRef() {
+        const d = new Date();
+        const ymd = String(d.getFullYear()) +
+          String(d.getMonth() + 1).padStart(2, '0') +
+          String(d.getDate()).padStart(2, '0');
+        const rand = Math.floor(1000 + Math.random() * 9000);
+        return 'NFA-' + ymd + '-' + rand;
+      }
+
+      function getNowStamp() {
+        const d = new Date();
+        return d.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }) +
+          ', ' + d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      }
+
+      function copyText(text, msg) {
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(text)
+            .then(function () { showToast(msg || 'Copied!'); })
+            .catch(function () { window.prompt('Copy text:', text); });
+        } else {
+          window.prompt('Copy text:', text);
+        }
+      }
+
+      // Encode/decode safe URL payload (no Base64 images in URL to prevent mobile crashes)
+      function encodeSafePayload(obj) {
+        try {
+          return encodeURIComponent(JSON.stringify(obj));
+        } catch (e) {
+          return '';
+        }
+      }
+      function decodeSafePayload(str) {
+        try {
+          return JSON.parse(decodeURIComponent(str));
+        } catch (e) {
+          return null;
+        }
+      }
+
+      function parseCustomerHash(hash) {
+        if (!hash.startsWith('#o=')) return false;
+        const data = decodeSafePayload(hash.slice(3));
+        if (!data || typeof data !== 'object') return false;
+        if (typeof data.o === 'boolean') config.isOpen = data.o;
+        if (data.w) config.whatsapp = String(data.w);
+        if (data.s) config.storeName = String(data.s);
+        if (data.i) config.introText = String(data.i);
+        if (data.c) config.closedMsg = String(data.c);
+        if (typeof data.f === 'number') config.fee = data.f;
+        if (data.q && String(data.q).startsWith('http')) config.qrUrl = String(data.q);
+        if (Array.isArray(data.m) && data.m.length > 0) {
+          config.menus = data.m.map(function (item, idx) {
+            return {
+              id: item.id || ('meal_' + idx),
+              name: String(item.n || ('Meal ' + (idx + 1))),
+              price: Number(item.p) || 10,
+              desc: String(item.d || ''),
+              available: item.a !== false,
+              photoData: '',
+              photoUrl: item.u && String(item.u).startsWith('http') ? String(item.u) : ''
+            };
+          });
+        }
+        return true;
+      }
+
+      function loadState() {
+        const saved = safeGet(STORAGE_KEY);
+        if (saved) {
+          try {
+            const parsed = JSON.parse(saved);
+            if (parsed && typeof parsed === 'object') {
+              config = Object.assign(JSON.parse(JSON.stringify(DEFAULT_CONFIG)), parsed);
+              if (!Array.isArray(config.menus) || config.menus.length === 0) {
+                config.menus = JSON.parse(JSON.stringify(DEFAULT_CONFIG.menus));
+              }
+            }
+          } catch (e) {}
+        }
+
+        const hash = window.location.hash || '';
+        if (hash.startsWith('#o=')) {
+          isCustomerLinkMode = parseCustomerHash(hash);
+        }
+
+        quantities = {};
+        const firstAvail = config.menus.find(function (m) { return m.available; });
+        if (firstAvail && config.isOpen) {
+          quantities[firstAvail.id] = 1;
+        }
+      }
+
+      function getQuote() {
+        const items = [];
+        let totalPax = 0;
+        let foodSubtotal = 0;
+
+        config.menus.forEach(function (m, idx) {
+          const qty = m.available ? (quantities[m.id] || 0) : 0;
+          if (qty > 0) {
+            const lineTotal = qty * m.price;
+            items.push({
+              id: m.id,
+              num: idx + 1,
+              name: m.name,
+              price: m.price,
+              qty: qty,
+              lineTotal: lineTotal
+            });
+            totalPax += qty;
+            foodSubtotal += lineTotal;
+          }
+        });
+
+        const fee = totalPax > 0 ? Number(config.fee || 0) : 0;
+        return {
+          items: items,
+          totalPax: totalPax,
+          foodSubtotal: foodSubtotal,
+          fee: fee,
+          grandTotal: foodSubtotal + fee
+        };
+      }
+
+      // ==================== RENDER CUSTOMER VIEW ====================
+      function renderCustomerView() {
+        document.getElementById('headerStoreName').textContent = config.storeName || 'NFA meals';
+        document.getElementById('custIntroText').textContent = config.introText || DEFAULT_INTRO;
+
+        const pill = document.getElementById('headerStatusPill');
+        const closedBanner = document.getElementById('closedBanner');
+        if (config.isOpen) {
+          pill.className = 'status-pill open';
+          pill.innerHTML = '<span class="status-dot"></span> OPEN';
+          closedBanner.classList.remove('show');
+        } else {
+          pill.className = 'status-pill closed';
+          pill.innerHTML = '<span class="status-dot"></span> CLOSED';
+          document.getElementById('closedBannerText').textContent = config.closedMsg || DEFAULT_CLOSED;
+          closedBanner.classList.add('show');
+        }
+
+        const grid = document.getElementById('menuGrid');
+        grid.innerHTML = config.menus.map(function (m, idx) {
+          const qty = m.available ? (quantities[m.id] || 0) : 0;
+          const disabledAll = !config.isOpen || !m.available;
+          const photoSrc = m.photoData || m.photoUrl || '';
+          const photoHtml = photoSrc
+            ? '<div class="menu-photo-wrap" data-action="zoom-photo" data-idx="' + idx + '">' +
+                '<img src="' + esc(photoSrc) + '" alt="' + esc(m.name) + '" />' +
+                '<span class="photo-zoom-tag">🔍 View Photo</span>' +
+              '</div>'
+            : '';
+
+          return (
+            '<div class="menu-card ' + (qty > 0 ? 'selected' : '') + ' ' + (!m.available ? 'sold-out' : '') + '">' +
+              '<div>' +
+                photoHtml +
+                '<div class="menu-card-top">' +
+                  '<div class="menu-name">' + (idx + 1) + '. ' + esc(m.name) + '</div>' +
+                  '<div class="menu-price">' + formatRM(m.price) + ' <small>/pax</small></div>' +
+                '</div>' +
+                '<div class="menu-desc">' + esc(m.desc) + '</div>' +
+              '</div>' +
+              '<div class="menu-footer">' +
+                (m.available
+                  ? '<span class="max-hint">Max ' + MAX_PAX_PER_MEAL + ' pax</span>' +
+                    '<div class="stepper">' +
+                      '<button type="button" class="step-btn" data-action="qty-dec" data-idx="' + idx + '" ' + (disabledAll || qty <= 0 ? 'disabled' : '') + '>−</button>' +
+                      '<span class="step-qty">' + qty + '</span>' +
+                      '<button type="button" class="step-btn" data-action="qty-inc" data-idx="' + idx + '" ' + (disabledAll || qty >= MAX_PAX_PER_MEAL ? 'disabled' : '') + '>+</button>' +
+                    '</div>'
+                  : '<span class="sold-badge">Sold Out</span>') +
+              '</div>' +
+            '</div>'
+          );
+        }).join('');
+
+        const q = getQuote();
+        const linesEl = document.getElementById('quoteLines');
+        if (q.items.length === 0) {
+          linesEl.innerHTML = '<div class="quote-line" style="color:var(--muted);"><span>Select at least 1 meal above</span><span>RM 0.00</span></div>';
+        } else {
+          linesEl.innerHTML = q.items.map(function (it) {
+            return '<div class="quote-line"><span>' + it.qty + ' × ' + esc(it.name) + ' (' + formatRM(it.price) + ')</span><span>' + formatRM(it.lineTotal) + '</span></div>';
+          }).join('');
+        }
+
+        document.getElementById('totalPaxText').textContent = q.totalPax;
+        document.getElementById('foodSubtotalText').textContent = formatRM(q.foodSubtotal);
+        document.getElementById('transportFeeText').textContent = formatRM(q.fee);
+        document.getElementById('grandTotalText').textContent = formatRM(q.grandTotal);
+        document.getElementById('qrAmountPrompt').textContent = formatRM(q.grandTotal);
+
+        const qrSrc = config.qrData || config.qrUrl || '';
+        const qrImg = document.getElementById('custQrImg');
+        const qrPh = document.getElementById('custQrPlaceholder');
+        if (qrSrc) {
+          qrImg.src = qrSrc;
+          qrImg.style.display = 'block';
+          qrPh.style.display = 'none';
+        } else {
+          qrImg.style.display = 'none';
+          qrPh.style.display = 'block';
+        }
+
+        const canOrder = config.isOpen && q.totalPax > 0;
+        document.getElementById('sendWhatsappBtn').disabled = !canOrder;
+        document.getElementById('confirmPaidBtn').disabled = !canOrder;
+        document.getElementById('viewReceiptBtn').disabled = !canOrder;
+      }
+
+      function buildOrderMessage(refId) {
+        const q = getQuote();
+        const name = (document.getElementById('custName').value || '').trim() || 'Customer';
+        const phone = (document.getElementById('custPhone').value || '').trim() || '-';
+        const notes = (document.getElementById('custNotes').value || '').trim();
+        const itemLines = q.items.map(function (i) {
+          return '• ' + i.qty + 'x ' + i.name + ' = ' + formatRM(i.lineTotal);
+        }).join('\n');
+
+        return [
+          '*NEW ORDER — ' + (config.storeName || 'NFA meals') + '*',
+          'Order Ref: *' + refId + '*',
+          'Name: ' + name,
+          'Phone: ' + phone,
+          'Pickup: Library UMS • 12:00 PM Collection',
+          notes ? ('Note: ' + notes) : null,
+          '',
+          '*Meals Purchased:*',
+          itemLines,
+          '',
+          'Food Subtotal (' + q.totalPax + ' pax): ' + formatRM(q.foodSubtotal),
+          'Library UMS Transport Fee: ' + formatRM(q.fee),
+          '*TOTAL PAID: ' + formatRM(q.grandTotal) + '*',
+          '_(Please verify payment to release Official Receipt)_'
+        ].filter(Boolean).join('\n');
+      }
+
+      function getOrderLog() {
+        const raw = safeGet(LOG_KEY);
+        try { return raw ? JSON.parse(raw) : []; } catch (e) { return []; }
+      }
+
+      function saveOrderLog(list) {
+        safeSet(LOG_KEY, JSON.stringify(list.slice(0, 100)));
+      }
+
+      function recordCustomerSubmission(openWhatsApp) {
+        if (!config.isOpen) return;
+        const q = getQuote();
+        if (q.totalPax === 0) return showToast('Please select at least 1 meal');
+
+        const name = (document.getElementById('custName').value || '').trim();
+        const phone = (document.getElementById('custPhone').value || '').trim();
+        if (!name) {
+          document.getElementById('custName').focus();
+          return showToast('Please enter your name');
+        }
+        if (!phone) {
+          document.getElementById('custPhone').focus();
+          return showToast('Please enter your phone number');
+        }
+
+        const refId = genOrderRef();
+        const list = getOrderLog();
+        list.unshift({
+          refId: refId,
+          time: getNowStamp(),
+          name: name,
+          phone: phone,
+          items: q.items.map(function (i) {
+            return { id: i.id, name: i.name, qty: i.qty, price: i.price, lineTotal: i.lineTotal };
+          }),
+          pax: q.totalPax,
+          foodSubtotal: q.foodSubtotal,
+          fee: q.fee,
+          total: q.grandTotal,
+          status: 'Payment Submitted',
+          verifiedAt: ''
+        });
+        saveOrderLog(list);
+
+        document.getElementById('pendingRefCode').textContent = refId;
+        document.getElementById('pendingOrderBanner').classList.add('show');
+        showToast('Order ' + refId + ' submitted!');
+
+        if (openWhatsApp) {
+          const text = buildOrderMessage(refId);
+          const waNum = cleanPhone(config.whatsapp);
+          const url = waNum
+            ? 'https://wa.me/' + waNum + '?text=' + encodeURIComponent(text)
+            : 'https://wa.me/?text=' + encodeURIComponent(text);
+          window.open(url, '_blank');
+        }
+      }
+
+      // ==================== OFFICIAL RECEIPT VIEW (#r=...) ====================
+      function buildOfficialReceiptUrl(order) {
+        const baseUrl = window.location.href.split('#')[0].split('?')[0];
+        const compact = {
+          id: order.refId,
+          s: config.storeName || 'NFA meals',
+          n: order.name,
+          p: order.phone,
+          t: order.verifiedAt || getNowStamp(),
+          f: Number(order.fee || 0),
+          g: Number(order.total || 0),
+          i: (order.items || []).map(function (it) {
+            return { n: it.name, q: it.qty, p: it.price };
+          })
+        };
+        return baseUrl + '#r=' + encodeSafePayload(compact);
+      }
+
+      function buildOfficialReceiptText(order, url) {
+        const lines = (order.items || []).map(function (it) {
+          const sub = (Number(it.qty) || 0) * (Number(it.price) || 0);
+          return '• ' + it.qty + 'x ' + it.name + ' = ' + formatRM(sub);
+        }).join('\n');
+
+        return [
+          '✅ *OFFICIAL RECEIPT — ' + (config.storeName || 'NFA meals') + '*',
+          'Status: *PAYMENT VERIFIED BY SELLER*',
+          'Receipt No: *' + order.refId + '*',
+          'Verified: ' + (order.verifiedAt || getNowStamp()),
+          'Customer: ' + order.name + ' (' + order.phone + ')',
+          'Pickup: Library UMS • 12:00 PM Collection',
+          '',
+          '*Meals Purchased:*',
+          lines,
+          '',
+          'Transport Fee: ' + formatRM(order.fee),
+          '*TOTAL PAID: ' + formatRM(order.total) + '*',
+          '',
+          'Official Digital Receipt Link:',
+          url
+        ].join('\n');
+      }
+
+      function renderOfficialReceiptPage(data) {
+        activeReceiptData = data;
+        document.getElementById('customerView').style.display = 'none';
+        document.getElementById('sellerView').style.display = 'none';
+        document.getElementById('topNavTabs').style.display = 'none';
+        document.getElementById('officialReceiptView').style.display = 'block';
+
+        const items = data.i || [];
+        let foodSum = 0;
+        const rowsHtml = items.map(function (it) {
+          const line = (Number(it.q) || 0) * (Number(it.p) || 0);
+          foodSum += line;
+          return (
+            '<div style="display:flex; justify-content:space-between; padding:6px 0; border-bottom:1px dashed #e2e8f0; font-size:13.5px;">' +
+              '<span><strong>' + esc(it.q) + '×</strong> ' + esc(it.n) + '</span>' +
+              '<span style="font-weight:700;">' + formatRM(line) + '</span>' +
+            '</div>'
+          );
+        }).join('');
+
+        document.getElementById('officialReceiptCardBody').innerHTML =
+          '<div style="text-align:center; border-bottom:1.5px solid #e2e8f0; padding-bottom:14px; margin-bottom:14px;">' +
+            '<div class="verified-stamp">✓ PAYMENT VERIFIED BY SELLER</div>' +
+            '<h2 style="font-size:20px; font-weight:900; margin-top:10px;">' + esc(data.s || 'NFA meals') + '</h2>' +
+            '<div style="font-size:12px; color:#64748b; font-weight:700;">Official Customer Payment Receipt</div>' +
+          '</div>' +
+          '<div style="font-size:13px; display:grid; gap:6px; margin-bottom:14px; background:#f8fafc; padding:12px; border-radius:12px;">' +
+            '<div style="display:flex; justify-content:space-between;"><span style="color:#64748b;">Receipt No:</span><strong>' + esc(data.id) + '</strong></div>' +
+            '<div style="display:flex; justify-content:space-between;"><span style="color:#64748b;">Verified At:</span><strong>' + esc(data.t) + '</strong></div>' +
+            '<div style="display:flex; justify-content:space-between;"><span style="color:#64748b;">Customer:</span><strong>' + esc(data.n) + '</strong></div>' +
+            '<div style="display:flex; justify-content:space-between;"><span style="color:#64748b;">Phone:</span><strong>' + esc(data.p) + '</strong></div>' +
+            '<div style="display:flex; justify-content:space-between;"><span style="color:#64748b;">Pickup:</span><strong>Library UMS • 12:00 PM</strong></div>' +
+          '</div>' +
+          '<div style="font-size:12px; font-weight:800; text-transform:uppercase; color:#64748b; margin-bottom:6px;">Meals Purchased</div>' +
+          rowsHtml +
+          '<div style="margin-top:12px; font-size:13.5px; display:grid; gap:6px;">' +
+            '<div style="display:flex; justify-content:space-between;"><span>Food Subtotal</span><span>' + formatRM(foodSum) + '</span></div>' +
+            '<div style="display:flex; justify-content:space-between;"><span>Library UMS Transport Fee</span><span>' + formatRM(data.f) + '</span></div>' +
+          '</div>' +
+          '<div class="quote-total-row" style="background:#15803d; margin-top:12px;">' +
+            '<span class="quote-total-label" style="color:#dcfce7;">TOTAL VERIFIED PAID</span>' +
+            '<span class="quote-total-val">' + formatRM(data.g) + '</span>' +
+          '</div>' +
+          '<div style="text-align:center; font-size:11.5px; color:#64748b; margin-top:12px;">' +
+            'Please show this Official Receipt upon 12:00 PM collection at Library UMS.' +
+          '</div>';
+      }
+
+      // ==================== SELLER VIEW & MENU BUILDER ====================
+      function switchTab(tab) {
+        const custView = document.getElementById('customerView');
+        const sellView = document.getElementById('sellerView');
+        const recView = document.getElementById('officialReceiptView');
+        const btnC = document.getElementById('tabCustomerBtn');
+        const btnS = document.getElementById('tabSellerBtn');
+
+        recView.style.display = 'none';
+        if (tab === 'seller') {
+          custView.style.display = 'none';
+          sellView.style.display = 'block';
+          btnC.classList.remove('active');
+          btnS.classList.add('active');
+          populateSellerView();
+        } else {
+          sellView.style.display = 'none';
+          custView.style.display = 'block';
+          btnS.classList.remove('active');
+          btnC.classList.add('active');
+          renderCustomerView();
+        }
+      }
+
+      function populateSellerView() {
+        document.getElementById('sellerStoreName').value = config.storeName || 'NFA meals';
+        document.getElementById('sellerWhatsapp').value = config.whatsapp || '';
+        document.getElementById('sellerIntroText').value = config.introText || DEFAULT_INTRO;
+        document.getElementById('sellerFee').value = Number(config.fee || 5).toFixed(2);
+        document.getElementById('sellerClosedMsg').value = config.closedMsg || DEFAULT_CLOSED;
+        document.getElementById('sellerQrUrl').value = config.qrUrl || '';
+
+        const card = document.getElementById('sellerStatusCard');
+        const heading = document.getElementById('sellerStatusHeading');
+        const bOpen = document.getElementById('btnSetOpen');
+        const bClosed = document.getElementById('btnSetClosed');
+        if (config.isOpen) {
+          card.classList.remove('is-closed');
+          heading.textContent = '🟢 Store Status: OPEN for Orders';
+          bOpen.className = 'toggle-opt active-open';
+          bClosed.className = 'toggle-opt';
+        } else {
+          card.classList.add('is-closed');
+          heading.textContent = '🔴 Store Status: CLOSED (Orders Paused)';
+          bOpen.className = 'toggle-opt';
+          bClosed.className = 'toggle-opt active-closed';
+        }
+
+        const qrSrc = config.qrData || config.qrUrl || '';
+        const qrWrap = document.getElementById('sellerQrPreviewWrap');
+        const qrPrev = document.getElementById('sellerQrPreview');
+        if (qrSrc) {
+          qrPrev.src = qrSrc;
+          qrWrap.style.display = 'block';
+        } else {
+          qrWrap.style.display = 'none';
+        }
+
+        renderSellerMenuBuilder();
+        refreshShareLinks();
+        renderSalesDashboard();
+      }
+
+      function renderSellerMenuBuilder() {
+        const container = document.getElementById('sellerMenuEditor');
+        container.innerHTML = config.menus.map(function (m, idx) {
+          const thumb = m.photoData || m.photoUrl || '';
+          return (
+            '<div class="seller-meal-box">' +
+              '<div class="seller-meal-head">' +
+                '<strong style="font-size:14px;">Meal #' + (idx + 1) + '</strong>' +
+                '<div style="display:flex; gap:6px; flex-wrap:wrap;">' +
+                  '<button type="button" class="btn btn-sm ' + (m.available ? 'btn-green' : 'btn-outline') + '" style="margin-top:0;" data-action="meal-toggle" data-idx="' + idx + '">' +
+                    (m.available ? '✓ Available' : '✕ Sold Out') +
+                  '</button>' +
+                  '<button type="button" class="btn btn-outline btn-sm" style="margin-top:0;" data-action="meal-up" data-idx="' + idx + '" ' + (idx === 0 ? 'disabled' : '') + '>↑</button>' +
+                  '<button type="button" class="btn btn-outline btn-sm" style="margin-top:0;" data-action="meal-down" data-idx="' + idx + '" ' + (idx === config.menus.length - 1 ? 'disabled' : '') + '>↓</button>' +
+                  '<button type="button" class="btn btn-outline btn-sm" style="margin-top:0; color:var(--red);" data-action="meal-del" data-idx="' + idx + '" ' + (config.menus.length <= 1 ? 'disabled' : '') + '>Delete</button>' +
+                '</div>' +
+              '</div>' +
+              '<div class="form-grid" style="margin-top:0;">' +
+                '<div class="field">' +
+                  '<label>Meal Name</label>' +
+                  '<input type="text" data-meal-field="name" data-idx="' + idx + '" value="' + esc(m.name) + '" />' +
+                '</div>' +
+                '<div class="field">' +
+                  '<label>Price per Pax (RM)</label>' +
+                  '<input type="number" step="0.50" min="0" data-meal-field="price" data-idx="' + idx + '" value="' + Number(m.price).toFixed(2) + '" />' +
+                '</div>' +
+                '<div class="field full">' +
+                  '<label>Dishes / Description</label>' +
+                  '<input type="text" data-meal-field="desc" data-idx="' + idx + '" value="' + esc(m.desc) + '" />' +
+                '</div>' +
+                '<div class="field full">' +
+                  '<label>Food Reference Photo (Upload or URL)</label>' +
+                  '<div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">' +
+                    '<label class="file-label" for="mealPhotoFile_' + idx + '">📸 Upload Food Photo</label>' +
+                    '<input type="file" id="mealPhotoFile_' + idx + '" accept="image/*" style="display:none;" data-meal-photo="' + idx + '" />' +
+                    '<input type="url" style="flex:1; min-width:160px;" placeholder="Or paste photo URL (https://...)" data-meal-field="photoUrl" data-idx="' + idx + '" value="' + esc(m.photoUrl || '') + '" />' +
+                    (thumb ? '<button type="button" class="btn btn-outline btn-sm" style="margin-top:0;" data-action="meal-clear-photo" data-idx="' + idx + '">Remove Photo</button>' : '') +
+                  '</div>' +
+                  (thumb ? '<img src="' + esc(thumb) + '" alt="Food thumb" style="margin-top:8px; width:110px; height:70px; object-fit:cover; border-radius:8px; border:1px solid var(--border);" />' : '') +
+                '</div>' +
+              '</div>' +
+            '</div>'
+          );
+        }).join('');
+      }
+
+      function saveSettings(showSavedBadge) {
+        config.storeName = (document.getElementById('sellerStoreName').value || '').trim() || 'NFA meals';
+        config.whatsapp = cleanPhone(document.getElementById('sellerWhatsapp').value);
+        config.introText = (document.getElementById('sellerIntroText').value || '').trim() || DEFAULT_INTRO;
+        const feeVal = parseFloat(document.getElementById('sellerFee').value);
+        config.fee = !isNaN(feeVal) && feeVal >= 0 ? feeVal : 5.00;
+        config.closedMsg = (document.getElementById('sellerClosedMsg').value || '').trim() || DEFAULT_CLOSED;
+        config.qrUrl = (document.getElementById('sellerQrUrl').value || '').trim();
+
+        const ok = safeSet(STORAGE_KEY, JSON.stringify(config));
+        if (!ok) {
+          showToast('Storage full — try smaller images');
+        }
+        refreshShareLinks();
+
+        if (showSavedBadge) {
+          const b = document.getElementById('savedBadge');
+          b.style.display = 'inline';
+          clearTimeout(window._nfaSaved);
+          window._nfaSaved = setTimeout(function () { b.style.display = 'none'; }, 1800);
+        }
+      }
+
+      function refreshShareLinks() {
+        const baseUrl = window.location.href.split('#')[0].split('?')[0];
+        const compact = {
+          o: config.isOpen,
+          w: config.whatsapp || '',
+          s: config.storeName || 'NFA meals',
+          i: config.introText || DEFAULT_INTRO,
+          c: config.closedMsg || DEFAULT_CLOSED,
+          f: Number(config.fee || 5),
+          q: config.qrUrl && config.qrUrl.startsWith('http') ? config.qrUrl : '',
+          m: config.menus.map(function (m) {
+            return {
+              id: m.id,
+              n: m.name,
+              p: Number(m.price),
+              d: m.desc,
+              a: !!m.available,
+              u: m.photoUrl && m.photoUrl.startsWith('http') ? m.photoUrl : ''
+            };
+          })
+        };
+        const encoded = encodeSafePayload(compact);
+        const custUrl = baseUrl + '#o=' + encoded;
+        const adminUrl = baseUrl + '#setup';
+
+        document.getElementById('shortCustomerLinkInput').value = custUrl;
+        document.getElementById('sellerAdminLinkInput').value = adminUrl;
+        document.getElementById('shortLinkChars').textContent = 'Short Link • ' + custUrl.length + ' chars';
+      }
+
+      // Safe lightweight image compressor (280px max, 0.68 JPEG)
+      function compressImageFile(file, callback) {
+        if (!file) return;
+        const objUrl = URL.createObjectURL(file);
+        const img = new Image();
+        img.onload = function () {
+          try {
+            const maxDim = 280;
+            let w = img.width;
+            let h = img.height;
+            if (w > maxDim || h > maxDim) {
+              if (w > h) { h = Math.round(h * maxDim / w); w = maxDim; }
+              else { w = Math.round(w * maxDim / h); h = maxDim; }
+            }
+            const canvas = document.createElement('canvas');
+            canvas.width = w;
+            canvas.height = h;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0, w, h);
+            const dataUrl = canvas.toDataURL('image/jpeg', 0.68);
+            callback(dataUrl);
+          } catch (e) {
+            showToast('Could not process image');
+          } finally {
+            URL.revokeObjectURL(objUrl);
+          }
+        };
+        img.onerror = function () {
+          URL.revokeObjectURL(objUrl);
+          showToast('Invalid image file');
+        };
+        img.src = objUrl;
+      }
+
+      // ==================== TOTAL SALES & MEAL BREAKDOWN ====================
+      function renderSalesDashboard() {
+        const list = getOrderLog();
+        const activeOrders = list.filter(function (o) { return o.status !== 'Cancelled'; });
+        const verifiedCount = activeOrders.filter(function (o) {
+          return o.status === 'Verified Paid' || o.status === 'Collected';
+        }).length;
+
+        let totalPax = 0;
+        let foodSales = 0;
+        let grandTotal = 0;
+        const mealTotals = {};
+
+        config.menus.forEach(function (m) {
+          mealTotals[m.name] = { name: m.name, qty: 0, revenue: 0 };
+        });
+
+        activeOrders.forEach(function (o) {
+          totalPax += Number(o.pax) || 0;
+          foodSales += Number(o.foodSubtotal) || 0;
+          grandTotal += Number(o.total) || 0;
+          (o.items || []).forEach(function (it) {
+            const key = it.name || 'Meal';
+            if (!mealTotals[key]) mealTotals[key] = { name: key, qty: 0, revenue: 0 };
+            mealTotals[key].qty += Number(it.qty) || 0;
+            mealTotals[key].revenue += (Number(it.qty) || 0) * (Number(it.price) || 0);
+          });
+        });
+
+        document.getElementById('statOrders').textContent = activeOrders.length;
+        document.getElementById('statVerified').textContent = verifiedCount;
+        document.getElementById('statPax').textContent = totalPax;
+        document.getElementById('statFoodSales').textContent = formatRM(foodSales);
+        document.getElementById('statRevenue').textContent = formatRM(grandTotal);
+
+        const breakdownEl = document.getElementById('mealBreakdownBox');
+        const mealArr = Object.values(mealTotals);
+        if (mealArr.length === 0) {
+          breakdownEl.innerHTML = '<div style="font-size:12.5px; color:var(--muted);">No meals configured.</div>';
+        } else {
+          breakdownEl.innerHTML =
+            '<div style="font-size:12px; font-weight:800; text-transform:uppercase; color:#475569; margin-bottom:8px;">Meals Purchased Breakdown</div>' +
+            mealArr.map(function (mt) {
+              const pct = totalPax > 0 ? Math.round((mt.qty / totalPax) * 100) : 0;
+              return (
+                '<div class="breakdown-row">' +
+                  '<div class="breakdown-meta">' +
+                    '<span>' + esc(mt.name) + ' — <strong>' + mt.qty + ' pax</strong> (' + pct + '%)</span>' +
+                    '<span>' + formatRM(mt.revenue) + '</span>' +
+                  '</div>' +
+                  '<div class="bar-track"><div class="bar-fill" style="width:' + pct + '%;"></div></div>' +
+                '</div>'
+              );
+            }).join('');
+        }
+
+        const logListEl = document.getElementById('orderLogList');
+        if (list.length === 0) {
+          logListEl.innerHTML = '<div style="text-align:center; color:var(--muted); font-size:13px; padding:16px 0;">No orders recorded yet today.</div>';
+          return;
+        }
+
+        logListEl.innerHTML = list.map(function (o, idx) {
+          const isVerified = o.status === 'Verified Paid' || o.status === 'Collected';
+          const badgeClass = o.status === 'Collected'
+            ? 'st-collected'
+            : (o.status === 'Verified Paid' ? 'st-verified' : (o.status === 'Cancelled' ? 'st-cancelled' : 'st-pending'));
+          const itemsSummary = (o.items || []).map(function (i) { return i.qty + 'x ' + i.name; }).join(', ');
+
+          return (
+            '<div class="log-item ' + (isVerified ? 'verified' : '') + '">' +
+              '<div style="display:flex; justify-content:space-between; align-items:flex-start; gap:8px; flex-wrap:wrap;">' +
+                '<div>' +
+                  '<div style="font-weight:800; font-size:14px;">' + esc(o.name) + ' <span style="font-weight:600; color:var(--muted); font-size:12px;">(' + esc(o.phone) + ')</span></div>' +
+                  '<div style="font-size:11.5px; color:var(--muted);">Ref: <strong>' + esc(o.refId) + '</strong> • ' + esc(o.time) + '</div>' +
+                '</div>' +
+                '<span class="badge-pill ' + badgeClass + '">' + esc(o.status) + '</span>' +
+              '</div>' +
+              '<div style="font-size:13px; color:#1e293b; margin:8px 0;">' +
+                esc(itemsSummary) + ' • <strong>' + formatRM(o.total) + '</strong>' +
+              '</div>' +
+              '<div style="display:flex; gap:6px; flex-wrap:wrap;">' +
+                (!isVerified && o.status !== 'Cancelled'
+                  ? '<button type="button" class="btn btn-green btn-sm" data-action="verify-issue-receipt" data-idx="' + idx + '">✓ Verify Payment &amp; Issue Official Receipt</button>'
+                  : '') +
+                (isVerified
+                  ? '<button type="button" class="btn btn-blue btn-sm" data-action="reopen-issued-receipt" data-idx="' + idx + '">🧾 View / Resend Official Receipt</button>'
+                  : '') +
+                '<button type="button" class="btn btn-outline btn-sm" style="margin-top:0;" data-action="cycle-status" data-idx="' + idx + '">Change Status</button>' +
+              '</div>' +
+            '</div>'
+          );
+        }).join('');
+      }
+
+      function openIssuedModalForOrder(order) {
+        activeIssuedOrder = order;
+        const url = buildOfficialReceiptUrl(order);
+        const text = buildOfficialReceiptText(order, url);
+        document.getElementById('issuedReceiptLinkInput').value = url;
+        document.getElementById('issuedReceiptPreText').textContent = text;
+        document.getElementById('issuedReceiptModal').classList.add('open');
+      }
+
+      // ==================== EVENT DELEGATION ====================
+      document.addEventListener('click', function (e) {
+        const btn = e.target.closest('[data-action]');
+        if (!btn) return;
+        const action = btn.getAttribute('data-action');
+        const idx = parseInt(btn.getAttribute('data-idx') || '-1', 10);
+
+        if (action === 'tab-customer') switchTab('customer');
+        else if (action === 'tab-seller') switchTab('seller');
+        else if (action === 'qty-dec' && config.menus[idx]) {
+          const id = config.menus[idx].id;
+          quantities[id] = Math.max(0, (quantities[id] || 0) - 1);
+          renderCustomerView();
+        } else if (action === 'qty-inc' && config.menus[idx]) {
+          const id = config.menus[idx].id;
+          quantities[id] = Math.min(MAX_PAX_PER_MEAL, (quantities[id] || 0) + 1);
+          renderCustomerView();
+        } else if (action === 'zoom-photo' && config.menus[idx]) {
+          const m = config.menus[idx];
+          const src = m.photoData || m.photoUrl;
+          if (src) {
+            document.getElementById('photoModalTitle').textContent = m.name + ' (' + formatRM(m.price) + ')';
+            document.getElementById('photoModalImg').src = src;
+            document.getElementById('photoModalDesc').textContent = m.desc;
+            document.getElementById('photoModal').classList.add('open');
+          }
+        } else if (action === 'copy-exact-amount') {
+          copyText(getQuote().grandTotal.toFixed(2), 'Copied ' + formatRM(getQuote().grandTotal));
+        } else if (action === 'submit-whatsapp') {
+          recordCustomerSubmission(true);
+        } else if (action === 'submit-direct') {
+          recordCustomerSubmission(false);
+        } else if (action === 'open-quote-modal') {
+          document.getElementById('receiptPreText').textContent = buildOrderMessage('PREVIEW');
+          document.getElementById('receiptModal').classList.add('open');
+        } else if (action === 'copy-quote-summary') {
+          copyText(document.getElementById('receiptPreText').textContent, 'Order summary copied!');
+        } else if (action === 'set-open') {
+          config.isOpen = true;
+          populateSellerView();
+          saveSettings(true);
+        } else if (action === 'set-closed') {
+          config.isOpen = false;
+          populateSellerView();
+          saveSettings(true);
+        } else if (action === 'copy-cust-link') {
+          copyText(document.getElementById('shortCustomerLinkInput').value, 'Customer link copied!');
+        } else if (action === 'share-cust-wa') {
+          const link = document.getElementById('shortCustomerLinkInput').value;
+          const msg = (config.isOpen
+            ? 'Order *' + config.storeName + '* now for *12:00 PM Collection at Library UMS* (Max 5 pax per meal):\n'
+            : '*' + config.storeName + '* orders are currently CLOSED:\n') + link;
+          window.open('https://wa.me/?text=' + encodeURIComponent(msg), '_blank');
+        } else if (action === 'copy-admin-link') {
+          copyText(document.getElementById('sellerAdminLinkInput').value, 'Seller admin link copied!');
+        } else if (action === 'clear-qr') {
+          config.qrData = '';
+          config.qrUrl = '';
+          document.getElementById('sellerQrUrl').value = '';
+          document.getElementById('qrFileInput').value = '';
+          populateSellerView();
+          saveSettings(true);
+          showToast('QR removed');
+        } else if (action === 'save-settings') {
+          saveSettings(true);
+          showToast('All settings saved!');
+        } else if (action === 'add-meal') {
+          config.menus.push({
+            id: 'meal_' + Date.now(),
+            name: 'New Special Meal',
+            price: 12.00,
+            desc: 'Freshly prepared home-cooked meal',
+            available: true,
+            photoData: '',
+            photoUrl: ''
+          });
+          renderSellerMenuBuilder();
+          saveSettings(true);
+          showToast('New meal added!');
+        } else if (action === 'reset-meals') {
+          if (window.confirm('Reset menu back to the default 3 meals (Basic, Standard, Premium)?')) {
+            config.menus = JSON.parse(JSON.stringify(DEFAULT_CONFIG.menus));
+            renderSellerMenuBuilder();
+            saveSettings(true);
+            showToast('Menu reset to default 3');
+          }
+        } else if (action === 'meal-toggle' && config.menus[idx]) {
+          config.menus[idx].available = !config.menus[idx].available;
+          renderSellerMenuBuilder();
+          saveSettings(true);
+        } else if (action === 'meal-up' && idx > 0) {
+          const tmp = config.menus[idx - 1];
+          config.menus[idx - 1] = config.menus[idx];
+          config.menus[idx] = tmp;
+          renderSellerMenuBuilder();
+          saveSettings(true);
+        } else if (action === 'meal-down' && idx >= 0 && idx < config.menus.length - 1) {
+          const tmp = config.menus[idx + 1];
+          config.menus[idx + 1] = config.menus[idx];
+          config.menus[idx] = tmp;
+          renderSellerMenuBuilder();
+          saveSettings(true);
+        } else if (action === 'meal-del' && config.menus.length > 1 && config.menus[idx]) {
+          config.menus.splice(idx, 1);
+          renderSellerMenuBuilder();
+          saveSettings(true);
+          showToast('Meal removed');
+        } else if (action === 'meal-clear-photo' && config.menus[idx]) {
+          config.menus[idx].photoData = '';
+          config.menus[idx].photoUrl = '';
+          renderSellerMenuBuilder();
+          saveSettings(true);
+          showToast('Photo removed');
+        } else if (action === 'verify-issue-receipt') {
+          const list = getOrderLog();
+          if (list[idx]) {
+            list[idx].status = 'Verified Paid';
+            list[idx].verifiedAt = getNowStamp();
+            saveOrderLog(list);
+            renderSalesDashboard();
+            openIssuedModalForOrder(list[idx]);
+          }
+        } else if (action === 'reopen-issued-receipt') {
+          const list = getOrderLog();
+          if (list[idx]) openIssuedModalForOrder(list[idx]);
+        } else if (action === 'cycle-status') {
+          const list = getOrderLog();
+          if (list[idx]) {
+            const states = ['Payment Submitted', 'Verified Paid', 'Collected', 'Cancelled'];
+            const next = states[(states.indexOf(list[idx].status) + 1) % states.length];
+            list[idx].status = next;
+            if (next === 'Verified Paid' && !list[idx].verifiedAt) list[idx].verifiedAt = getNowStamp();
+            saveOrderLog(list);
+            renderSalesDashboard();
+          }
+        } else if (action === 'copy-issued-link') {
+          copyText(document.getElementById('issuedReceiptLinkInput').value, 'Official Receipt link copied!');
+        } else if (action === 'send-issued-wa') {
+          if (!activeIssuedOrder) return;
+          const text = document.getElementById('issuedReceiptPreText').textContent;
+          const phone = cleanPhone(activeIssuedOrder.phone);
+          const url = phone
+            ? 'https://wa.me/' + phone + '?text=' + encodeURIComponent(text)
+            : 'https://wa.me/?text=' + encodeURIComponent(text);
+          window.open(url, '_blank');
+        } else if (action === 'preview-issued-card') {
+          if (!activeIssuedOrder) return;
+          document.querySelectorAll('.modal-backdrop').forEach(function (m) { m.classList.remove('open'); });
+          renderOfficialReceiptPage({
+            id: activeIssuedOrder.refId,
+            s: config.storeName || 'NFA meals',
+            n: activeIssuedOrder.name,
+            p: activeIssuedOrder.phone,
+            t: activeIssuedOrder.verifiedAt || getNowStamp(),
+            f: activeIssuedOrder.fee,
+            g: activeIssuedOrder.total,
+            i: (activeIssuedOrder.items || []).map(function (it) { return { n: it.name, q: it.qty, p: it.price }; })
+          });
+        } else if (action === 'copy-official-receipt-text') {
+          if (!activeReceiptData) return;
+          const fakeOrder = {
+            refId: activeReceiptData.id,
+            name: activeReceiptData.n,
+            phone: activeReceiptData.p,
+            verifiedAt: activeReceiptData.t,
+            fee: activeReceiptData.f,
+            total: activeReceiptData.g,
+            items: (activeReceiptData.i || []).map(function (it) { return { name: it.n, qty: it.q, price: it.p }; })
+          };
+          copyText(buildOfficialReceiptText(fakeOrder, window.location.href), 'Official Receipt copied!');
+        } else if (action === 'print-official-receipt') {
+          try { window.print(); } catch (err) { showToast('Use browser Share → Print / Save PDF'); }
+        } else if (action === 'back-to-order') {
+          try { window.history.replaceState(null, '', window.location.pathname); } catch (err) {}
+          document.getElementById('topNavTabs').style.display = isCustomerLinkMode ? 'none' : 'flex';
+          switchTab('customer');
+        } else if (action === 'open-import-modal') {
+          document.getElementById('importWaText').value = '';
+          document.getElementById('importModal').classList.add('open');
+        } else if (action === 'run-import-wa') {
+          const raw = (document.getElementById('importWaText').value || '').trim();
+          if (!raw) return showToast('Paste a WhatsApp message first');
+          const nameMatch = raw.match(/Name:\s*(.+)/i);
+          const phoneMatch = raw.match(/Phone:\s*(.+)/i);
+          const refMatch = raw.match(/Order Ref:\s*\*?([A-Z0-9-]+)\*?/i);
+          const items = [];
+          let pax = 0;
+          let foodSub = 0;
+
+          config.menus.forEach(function (m) {
+            const escapedName = m.name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+            const rx = new RegExp('(\\d+)\\s*[x×]\\s*' + escapedName, 'i');
+            const match = raw.match(rx);
+            if (match) {
+              const q = parseInt(match[1], 10) || 0;
+              if (q > 0) {
+                items.push({ id: m.id, name: m.name, qty: q, price: m.price, lineTotal: q * m.price });
+                pax += q;
+                foodSub += q * m.price;
+              }
+            }
+          });
+
+          if (items.length === 0) return showToast('Could not detect meal quantities (e.g. 2x Basic)');
+          const fee = Number(config.fee || 5);
+          const list = getOrderLog();
+          list.unshift({
+            refId: refMatch ? refMatch[1] : genOrderRef(),
+            time: getNowStamp(),
+            name: nameMatch ? nameMatch[1].trim() : 'WhatsApp Customer',
+            phone: phoneMatch ? phoneMatch[1].trim() : '-',
+            items: items,
+            pax: pax,
+            foodSubtotal: foodSub,
+            fee: fee,
+            total: foodSub + fee,
+            status: 'Payment Submitted',
+            verifiedAt: ''
+          });
+          saveOrderLog(list);
+          document.getElementById('importModal').classList.remove('open');
+          renderSalesDashboard();
+          showToast('Imported ' + pax + ' meals into sales log!');
+        } else if (action === 'open-manual-modal') {
+          document.getElementById('manName').value = '';
+          document.getElementById('manPhone').value = '';
+          document.getElementById('manualMealInputs').innerHTML = config.menus.map(function (m, i) {
+            return (
+              '<div style="display:flex; justify-content:space-between; align-items:center; padding:6px 0; border-bottom:1px solid var(--border);">' +
+                '<span style="font-size:13.5px; font-weight:700;">' + esc(m.name) + ' (' + formatRM(m.price) + ')</span>' +
+                '<input type="number" min="0" max="5" value="0" data-man-idx="' + i + '" style="width:64px; padding:6px; border:1.5px solid var(--border); border-radius:8px; text-align:center; font-weight:800;" />' +
+              '</div>'
+            );
+          }).join('');
+          document.getElementById('manualModal').classList.add('open');
+        } else if (action === 'save-manual-order') {
+          const name = (document.getElementById('manName').value || '').trim();
+          if (!name) return showToast('Enter customer name');
+          const phone = (document.getElementById('manPhone').value || '').trim() || '-';
+          const items = [];
+          let pax = 0;
+          let foodSub = 0;
+          document.querySelectorAll('[data-man-idx]').forEach(function (inp) {
+            const mIdx = parseInt(inp.getAttribute('data-man-idx'), 10);
+            const q = parseInt(inp.value || '0', 10) || 0;
+            const m = config.menus[mIdx];
+            if (m && q > 0) {
+              items.push({ id: m.id, name: m.name, qty: q, price: m.price, lineTotal: q * m.price });
+              pax += q;
+              foodSub += q * m.price;
+            }
+          });
+          if (items.length === 0) return showToast('Enter at least 1 meal quantity');
+          const fee = Number(config.fee || 5);
+          const list = getOrderLog();
+          list.unshift({
+            refId: genOrderRef(),
+            time: getNowStamp(),
+            name: name,
+            phone: phone,
+            items: items,
+            pax: pax,
+            foodSubtotal: foodSub,
+            fee: fee,
+            total: foodSub + fee,
+            status: 'Verified Paid',
+            verifiedAt: getNowStamp()
+          });
+          saveOrderLog(list);
+          document.getElementById('manualModal').classList.remove('open');
+          renderSalesDashboard();
+          showToast('Order logged!');
+        } else if (action === 'copy-sales-report') {
+          const orders = document.getElementById('statOrders').textContent;
+          const verified = document.getElementById('statVerified').textContent;
+          const pax = document.getElementById('statPax').textContent;
+          const rev = document.getElementById('statRevenue').textContent;
+          const report = [
+            '*' + (config.storeName || 'NFA meals') + ' — Daily Sales Report*',
+            'Active Orders: ' + orders + ' (Verified Paid: ' + verified + ')',
+            'Total Meals Sold: ' + pax + ' pax',
+            'Grand Total Sales: ' + rev
+          ].join('\n');
+          copyText(report, 'Sales report copied!');
+        } else if (action === 'clear-log') {
+          if (window.confirm("Clear all orders in today's sales log?")) {
+            saveOrderLog([]);
+            renderSalesDashboard();
+          }
+        } else if (action === 'close-modals') {
+          document.querySelectorAll('.modal-backdrop').forEach(function (m) { m.classList.remove('open'); });
+        }
+      });
+
+      // Input delegation for Seller Settings & Menu Builder
+      document.addEventListener('input', function (e) {
+        const target = e.target;
+        if (target.matches('#sellerStoreName, #sellerWhatsapp, #sellerIntroText, #sellerFee, #sellerClosedMsg, #sellerQrUrl')) {
+          saveSettings(false);
+          if (target.id === 'sellerQrUrl') {
+            const src = config.qrData || config.qrUrl || '';
+            const wrap = document.getElementById('sellerQrPreviewWrap');
+            const prev = document.getElementById('sellerQrPreview');
+            if (src) { prev.src = src; wrap.style.display = 'block'; }
+            else { wrap.style.display = 'none'; }
+          }
+        } else if (target.hasAttribute('data-meal-field')) {
+          const field = target.getAttribute('data-meal-field');
+          const idx = parseInt(target.getAttribute('data-idx'), 10);
+          const m = config.menus[idx];
+          if (!m) return;
+          if (field === 'name') m.name = target.value;
+          else if (field === 'desc') m.desc = target.value;
+          else if (field === 'photoUrl') m.photoUrl = target.value.trim();
+          else if (field === 'price') {
+            const num = parseFloat(target.value);
+            if (!isNaN(num) && num >= 0) m.price = num;
+          }
+          saveSettings(false);
+        }
+      });
+
+      // File upload delegation (QR & Meal Photos)
+      document.addEventListener('change', function (e) {
+        const target = e.target;
+        if (target.id === 'qrFileInput' && target.files && target.files[0]) {
+          compressImageFile(target.files[0], function (dataUrl) {
+            config.qrData = dataUrl;
+            populateSellerView();
+            saveSettings(true);
+            showToast('QR code uploaded!');
+          });
+        } else if (target.hasAttribute('data-meal-photo') && target.files && target.files[0]) {
+          const idx = parseInt(target.getAttribute('data-meal-photo'), 10);
+          compressImageFile(target.files[0], function (dataUrl) {
+            if (config.menus[idx]) {
+              config.menus[idx].photoData = dataUrl;
+              renderSellerMenuBuilder();
+              saveSettings(true);
+              showToast('Food photo uploaded!');
+            }
+          });
+        }
+      });
+
+      // Live cross-tab sync for Total Sales Log
+      window.addEventListener('storage', function (e) {
+        if (e.key === LOG_KEY && document.getElementById('sellerView').style.display !== 'none') {
+          renderSalesDashboard();
+        }
+      });
+
+      // Safe Boot
+      try {
+        loadState();
+        const hash = window.location.hash || '';
+        if (hash.startsWith('#r=')) {
+          const recData = decodeSafePayload(hash.slice(3));
+          if (recData) {
+            renderOfficialReceiptPage(recData);
+            return;
+          }
+        }
+        if (isCustomerLinkMode) {
+          document.getElementById('topNavTabs').style.display = 'none';
+        }
+        if (hash === '#setup') {
+          switchTab('seller');
+        } else {
+          renderCustomerView();
+        }
+      } catch (err) {
+        renderCustomerView();
+      }
+    })();
+  </script>
+</body>
+</html>
+
